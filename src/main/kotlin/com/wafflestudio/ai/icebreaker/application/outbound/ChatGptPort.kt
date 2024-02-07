@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component
 interface ChatGptPort {
     suspend fun createChat(
         prompt: String,
-        conversations: List<ChatGptConversationDto> = emptyList(),
+        conversations: List<ChatGptConversationDto> = emptyList()
     ): ChatGptMessageResponseDto?
 }
 
@@ -35,7 +35,6 @@ class ChatGptAdapter(
             ?.message
             ?.messageContent
             ?: return null
-
 
         return when (response) {
             is TextContent -> ChatGptMessageResponseDto(

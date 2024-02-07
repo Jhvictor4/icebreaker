@@ -1,2 +1,7 @@
 openai:
   api-key: YOUR_API_KEY
+
+weaviate:
+    host: YOUR_HOST
+    api-key: YOUR_API_KEY
+    scheme: YOUR_SCHEMA

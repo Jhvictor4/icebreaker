@@ -14,14 +14,13 @@ class ApiController(
 ) {
 
     data class UnderstandByUriRequest(
-        val uri: String,
+        val uri: String
     )
 
     @PostMapping("/understanding/by-uri")
     fun understand(
         @RequestBody request: UnderstandByUriRequest
     ): ChatGptMessageResponseDto? {
-       return useCase.understandByUri(request.uri)
+        return useCase.understandByUri(request.uri)
     }
-
 }

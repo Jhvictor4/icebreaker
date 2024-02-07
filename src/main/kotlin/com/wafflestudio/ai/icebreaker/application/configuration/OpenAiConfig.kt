@@ -28,7 +28,7 @@ internal class OpenAiConfig(
                 engine {
                     this as CIOEngineConfig
                     https {
-                        trustManager = object: X509TrustManager {
+                        trustManager = object : X509TrustManager {
                             override fun checkClientTrusted(p0: Array<out X509Certificate>?, p1: String?) { }
 
                             override fun checkServerTrusted(p0: Array<out X509Certificate>?, p1: String?) { }
@@ -40,5 +40,4 @@ internal class OpenAiConfig(
             }
         )
     }
-
 }

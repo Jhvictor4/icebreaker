@@ -7,8 +7,7 @@ data class ChatGptConversationDto(
     val message: String
 )
 
-
 data class ChatGptMessageResponseDto(
     val message: String,
-    val imageFileUrls: List<String>,
+    val imageFileUrls: List<String>
 )

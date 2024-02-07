@@ -8,5 +8,5 @@ enum class Understandable {
 enum class Understanding {
     LIFE_EXPERIENCE,
     OUTDOOR_ACTIVITY,
-    PLACES_VISITED,
+    PLACES_VISITED
 }

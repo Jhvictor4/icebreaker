@@ -9,5 +9,4 @@ class IceBreakerApplicationTests {
     @Test
     fun contextLoads() {
     }
-
 }
