@@ -43,6 +43,7 @@ dependencies {
     implementation("io.ktor:ktor-client-core:$ktor_version")
     implementation("io.ktor:ktor-client-cio:$ktor_version")
 
+    testImplementation("com.github.instagram4j:instagram4j:2.0.7")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
 }
 
