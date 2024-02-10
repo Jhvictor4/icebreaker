@@ -1,7 +1,9 @@
-package com.wafflestudio.ai.icebreaker.application.outbound
+package com.wafflestudio.ai.icebreaker.outbound.common
 
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.wafflestudio.ai.icebreaker.application.Log
+import com.wafflestudio.ai.icebreaker.application.common.WeaviatePort
+import com.wafflestudio.ai.icebreaker.application.configuration.WvClientConfig.Companion.logger
 import io.weaviate.client.WeaviateClient
 import io.weaviate.client.v1.data.model.WeaviateObject
 import io.weaviate.client.v1.graphql.query.argument.NearTextArgument
@@ -9,18 +11,6 @@ import io.weaviate.client.v1.graphql.query.fields.Field
 import io.weaviate.client.v1.schema.model.Schema
 import io.weaviate.client.v1.schema.model.WeaviateClass
 import org.springframework.stereotype.Component
-
-interface WeaviatePort {
-
-    fun addSchema(className: String)
-
-    fun getSchema(): Schema
-
-    fun save(className: String, data: List<Question>)
-
-    fun nearTextQuery(className: String, text: String)
-
-}
 
 @Component
 class WeaviateAdapter(
