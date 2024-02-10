@@ -1,5 +1,7 @@
-package com.wafflestudio.ai.icebreaker.application.saju
+package com.wafflestudio.ai.icebreaker.application.saju.port
 
+import com.wafflestudio.ai.icebreaker.application.saju.SaJu
+import com.wafflestudio.ai.icebreaker.application.saju.십신
 import java.time.LocalDateTime
 
 interface SaJuUseCase {
@@ -10,17 +12,16 @@ interface SaJuUseCase {
 
     fun getSaJuRelation(
         saJu: SaJu,
-        another: SaJu,
+        another: SaJu
     ): SaJuRelationResponse
-
 }
 
 data class SaJuResponse(
-    val saJu: SaJu,
+    val saJu: SaJu
 )
 
 data class SaJuRelationResponse(
     val tenSpirit: 십신,
     val relation: String,
-    val description: String,
+    val description: String
 )

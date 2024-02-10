@@ -1,10 +1,13 @@
 package com.wafflestudio.ai.icebreaker.application.saju
 
+import com.wafflestudio.ai.icebreaker.application.saju.port.SaJuRelationResponse
+import com.wafflestudio.ai.icebreaker.application.saju.port.SaJuResponse
+import com.wafflestudio.ai.icebreaker.application.saju.port.SaJuUseCase
 import org.springframework.stereotype.Component
 import java.time.LocalDateTime
 
 @Component
-class SaJuUseCaseImpl: SaJuUseCase {
+class SaJuService : SaJuUseCase {
     override fun getSaJu(birth: LocalDateTime): SaJuResponse {
         val saJu = SaJu.from(birth)
         return SaJuResponse(saJu)

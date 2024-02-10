@@ -1,4 +1,4 @@
-package com.wafflestudio.ai.icebreaker.application.outbound
+package com.wafflestudio.ai.icebreaker.application.common
 
 import com.aallam.openai.api.core.Role
 

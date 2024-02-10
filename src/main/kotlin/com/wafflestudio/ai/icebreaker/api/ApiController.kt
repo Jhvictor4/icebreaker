@@ -1,6 +1,6 @@
 package com.wafflestudio.ai.icebreaker.api
 
-import com.wafflestudio.ai.icebreaker.application.outbound.ChatGptMessageResponseDto
+import com.wafflestudio.ai.icebreaker.application.common.ChatGptMessageResponseDto
 import com.wafflestudio.ai.icebreaker.application.understanding.UnderstandingUseCase
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody

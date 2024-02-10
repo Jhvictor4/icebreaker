@@ -1,18 +1,14 @@
-package com.wafflestudio.ai.icebreaker.application.outbound
+package com.wafflestudio.ai.icebreaker.outbound.common
 
 import com.aallam.openai.api.chat.*
 import com.aallam.openai.api.core.Role
 import com.aallam.openai.api.model.ModelId
 import com.aallam.openai.client.OpenAI
+import com.wafflestudio.ai.icebreaker.application.common.ChatGptConversationDto
+import com.wafflestudio.ai.icebreaker.application.common.ChatGptMessageResponseDto
+import com.wafflestudio.ai.icebreaker.application.common.ChatGptPort
 import com.wafflestudio.ai.icebreaker.application.understanding.Understanding
 import org.springframework.stereotype.Component
-
-interface ChatGptPort {
-    suspend fun createChat(
-        prompt: String,
-        conversations: List<ChatGptConversationDto> = emptyList()
-    ): ChatGptMessageResponseDto?
-}
 
 @Component
 class ChatGptAdapter(

@@ -47,7 +47,9 @@ dependencies {
 }
 
 ktlint {
-    disabledRules.set(setOf("no-wildcard-imports"))
+    disabledRules.set(
+        setOf("no-wildcard-imports", "enum-entry-name-case")
+    )
 }
 
 tasks.withType<KotlinCompile> {
