@@ -1,6 +1,5 @@
 package com.wafflestudio.ai.icebreaker.application.common
 
-import com.wafflestudio.ai.icebreaker.outbound.common.Question
 import io.weaviate.client.v1.schema.model.Schema
 
 interface WeaviatePort {
@@ -9,8 +8,14 @@ interface WeaviatePort {
 
     fun getSchema(): Schema
 
-    fun save(className: String, data: List<Question>)
+    fun save(className: String, text: String)
 
-    fun nearTextQuery(className: String, text: String)
+    fun saveImage(className: String, fileContent: ByteArray)
+
+    fun getAll(className: String)
+
+    fun searchNearText(className: String, text: String)
+
+    fun searchNearImage(className: String, fileContent: ByteArray)
 
 }

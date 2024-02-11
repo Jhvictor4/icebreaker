@@ -1,13 +1,12 @@
 package com.wafflestudio.ai.icebreaker
 
-import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
-import com.fasterxml.jackson.module.kotlin.readValue
-import com.wafflestudio.ai.icebreaker.application.outbound.Question
-import com.wafflestudio.ai.icebreaker.application.outbound.WeaviatePort
+import com.wafflestudio.ai.icebreaker.application.common.WeaviatePort
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
-import java.net.URI
+import org.springframework.core.io.ClassPathResource
+import java.nio.file.Files
+import java.nio.file.Path
 
 /**
  * Weaviate 작동 여부 테스트.
@@ -28,14 +27,55 @@ class WvTempTest @Autowired constructor(
     }
 
     @Test
-    fun `데이터 저장`() {
-        val json = URI("https://raw.githubusercontent.com/weaviate-tutorials/quickstart/main/data/jeopardy_tiny.json").toURL().readText()
-        weaviatePort.save("Question", jacksonObjectMapper().readValue<List<Question>>(json))
+    fun `단일 데이터 저장`() {
+        weaviatePort.save("Question", "kitty")
+        weaviatePort.save("Question", "dog")
+        weaviatePort.save("Question", "puppy")
+        weaviatePort.save("Question", "world")
+        weaviatePort.save("Question", "sea")
+        weaviatePort.save("Question", "good")
     }
 
     @Test
-    fun `유사 텍스트 조회`() {
-        weaviatePort.nearTextQuery("Question", "biology")
+    fun `이미지 데이터 저장`() {
+        val paths = listOf("cat.jpg", "human.jpg")
+
+        for (path in paths) {
+            val resource = ClassPathResource(path)
+            val bytes = Files.readAllBytes(Path.of(resource.uri))
+            weaviatePort.saveImage("Question", bytes)
+        }
+    }
+
+    @Test
+    fun `데이터 조회`() {
+        weaviatePort.getAll("Question")
+    }
+
+    @Test
+    fun `cat 텍스트로 유사한 데이터 조회`() {
+        weaviatePort.searchNearText("Question", "cat")
+    }
+
+    @Test
+    fun `human 텍스트로 유사한 데이터 조회`() {
+        weaviatePort.searchNearText("Question", "people")
+    }
+
+    @Test
+    fun `고양이 이미지 유사한 데이터 조회`() {
+        val path = "cat_for_query.jpg"
+        val resource = ClassPathResource(path)
+        val bytes = Files.readAllBytes(Path.of(resource.uri))
+        weaviatePort.searchNearImage("Question", bytes)
+    }
+
+    @Test
+    fun `사람 이미지로 유사한 데이터 조회`() {
+        val path = "human_for_query.jpg"
+        val resource = ClassPathResource(path)
+        val bytes = Files.readAllBytes(Path.of(resource.uri))
+        weaviatePort.searchNearImage("Question", bytes)
     }
 
 }
