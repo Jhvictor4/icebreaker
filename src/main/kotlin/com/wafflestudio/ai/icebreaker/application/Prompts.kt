@@ -43,6 +43,7 @@ fun iceBreakingSystemPrompt(): String {
         
         Good conversation topics are those that are interesting, not trivial, and specific.
         Try to find AT LEAST one extra information that is not given at the beginning of the conversation.
+        make use of function call if available.
                 
         You should either plan and execute sequence of actions, or finish the conversation by suggesting a list of conversation topic.
         When you make suggestions, you should consider the following:
