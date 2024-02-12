@@ -41,7 +41,7 @@ dependencies {
 
     implementation("com.aallam.openai:openai-client:3.6.3")
     implementation("io.ktor:ktor-client-core:$ktor_version")
-    implementation("io.ktor:ktor-client-cio:$ktor_version")
+    implementation("io.ktor:ktor-client-okhttp:$ktor_version")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
 }

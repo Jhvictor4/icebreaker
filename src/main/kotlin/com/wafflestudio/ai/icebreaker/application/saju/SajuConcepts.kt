@@ -21,6 +21,39 @@ data class SaJu(
         hourly.지지_음양오행
     )
 
+    val shortString =
+        "${yearly.twoLetters},${monthly.twoLetters},${daily.twoLetters},${hourly.twoLetters}"
+
+    val graph =
+        """
+            ${yearly.천간.verbose()} | ${monthly.천간.verbose()} | ${daily.천간.verbose()} | ${hourly.천간.verbose()}
+            ${yearly.지지.verbose()} | ${monthly.지지.verbose()} | ${daily.지지.verbose()} | ${hourly.지지.verbose()}
+        """.trimIndent()
+
+    fun relation_graph(other: SaJu): String = other.let {
+        val yearly = 십신.calculate(it.yearly.천간_음양오행, this.daily.천간_음양오행)
+        val yearlyEarth = 십신.calculate(it.yearly.지지_음양오행, this.daily.천간_음양오행)
+        val monthly = 십신.calculate(it.monthly.천간_음양오행, this.daily.천간_음양오행)
+        val monthlyEarth = 십신.calculate(it.monthly.지지_음양오행, this.daily.천간_음양오행)
+        val daily = 십신.calculate(it.daily.천간_음양오행, this.daily.천간_음양오행)
+        val dailyEarth = 십신.calculate(it.daily.지지_음양오행, this.daily.천간_음양오행)
+        val hourly = 십신.calculate(it.hourly.천간_음양오행, this.daily.천간_음양오행)
+        val hourlyEarth = 십신.calculate(it.hourly.지지_음양오행, this.daily.천간_음양오행)
+
+        """
+            ${yearly.name} | ${monthly.name} | ${daily.name} | ${hourly.name}
+            ${yearlyEarth.name} | ${monthlyEarth.name} | ${dailyEarth.name} | ${hourlyEarth.name}
+        """.trimIndent()
+    }
+
+    private fun 천간.verbose() = let { cg ->
+        "${cg.name} (${cg.yy}, ${cg.oh.easyKorean})"
+    }
+
+    private fun 지지.verbose() = let { zz ->
+        "${zz.name} (${zz.yy}, ${zz.oh.easyKorean})"
+    }
+
     companion object {
         fun from(birth: LocalDateTime): SaJu {
             val birthDate = birth.toLocalDate()

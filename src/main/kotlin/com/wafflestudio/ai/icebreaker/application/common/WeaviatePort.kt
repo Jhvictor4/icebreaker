@@ -12,5 +12,4 @@ interface WeaviatePort {
     fun save(className: String, data: List<Question>)
 
     fun nearTextQuery(className: String, text: String)
-
 }

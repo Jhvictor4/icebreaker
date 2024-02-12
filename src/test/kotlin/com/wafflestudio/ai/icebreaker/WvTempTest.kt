@@ -2,8 +2,8 @@ package com.wafflestudio.ai.icebreaker
 
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
-import com.wafflestudio.ai.icebreaker.application.outbound.Question
-import com.wafflestudio.ai.icebreaker.application.outbound.WeaviatePort
+import com.wafflestudio.ai.icebreaker.application.common.WeaviatePort
+import com.wafflestudio.ai.icebreaker.outbound.common.Question
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
@@ -14,7 +14,7 @@ import java.net.URI
  */
 @SpringBootTest
 class WvTempTest @Autowired constructor(
-    val weaviatePort: WeaviatePort,
+    val weaviatePort: WeaviatePort
 ) {
 
     @Test
@@ -37,5 +37,4 @@ class WvTempTest @Autowired constructor(
     fun `유사 텍스트 조회`() {
         weaviatePort.nearTextQuery("Question", "biology")
     }
-
 }

@@ -4,10 +4,8 @@ import com.aallam.openai.api.chat.*
 import com.aallam.openai.api.core.Role
 import com.aallam.openai.api.model.ModelId
 import com.aallam.openai.client.OpenAI
-import com.wafflestudio.ai.icebreaker.application.common.ChatGptConversationDto
-import com.wafflestudio.ai.icebreaker.application.common.ChatGptMessageResponseDto
-import com.wafflestudio.ai.icebreaker.application.common.ChatGptPort
-import com.wafflestudio.ai.icebreaker.application.understanding.Understanding
+import com.wafflestudio.ai.icebreaker.application.Log
+import com.wafflestudio.ai.icebreaker.application.common.*
 import org.springframework.stereotype.Component
 
 @Component
@@ -16,16 +14,31 @@ class ChatGptAdapter(
 ) : ChatGptPort {
     override suspend fun createChat(
         prompt: String,
-        conversations: List<ChatGptConversationDto>
+        conversations: List<ChatGptConversationDto>,
+        initialPrompt: String
     ): ChatGptMessageResponseDto? {
-        val response = openAI.chatCompletion(
-            request = ChatCompletionRequest(
-                model = ModelId("gpt-3.5-turbo"),
-                messages = initialPrompt + conversations.map {
-                    ChatMessage(role = it.role, content = it.message)
-                }
+        val chatMessages = listOfNotNull(
+            initialPrompt.takeUnless { it.isEmpty() },
+            prompt.takeUnless { it.isEmpty() }
+        ).map { ChatMessage(Role.User, it) } + conversations.map {
+            ChatMessage(role = it.role, content = it.message)
+        }
+
+        if (chatMessages.isEmpty()) return null
+
+        val rawResponse = try {
+            openAI.chatCompletion(
+                request = ChatCompletionRequest(
+                    model = ModelId("gpt-3.5-turbo"),
+                    messages = chatMessages
+                )
             )
-        )
+        } catch (e: Exception) {
+            logger.error { "Failed to create chat: ${e.message}" }
+            return null
+        }
+
+        val response = rawResponse
             .choices
             .firstOrNull()
             ?.message
@@ -47,21 +60,15 @@ class ChatGptAdapter(
         }
     }
 
-    private val initialPrompt = """
-        You are a helpful assistant that find users' characteristics and life experiences from social activities.
-        You are asked to find any helpful information for people to understand about the user.
-        You are given certain kind of images, web pages, and social media posts and then you are asked to find the user's characteristics and life experiences.
-        You need to categorize what you've found and provide a summary of the user's characteristics and life experiences.
-        Available Categories are as follows:
-        ${Understanding.values().joinToString(", ") { it.name }}
-        
-        After freely categorizing the user's characteristics and life experiences, provide a summary of the user's characteristics and life experiences.
-        Result Format should be as follows (example):
-        <RESULT>
-        {"understanding": "${Understanding.LIFE_EXPERIENCE}", "content": "The user has a lot of experience in traveling and has a lot of friends."}
-        {"understanding": "${Understanding.OUTDOOR_ACTIVITY}", "content": "The user have gone to hiking and camping in September 8th, 2023."}
-        <RESULT>
-    """.trimIndent()
-        .let { ChatMessage(Role.System, it) }
-        .let(::listOf)
+    override suspend fun selfDiscovery(prompt: String): ChatGptMessageResponseDto? {
+        val selectedModules = createChat(SELECT_STEP_PROMPT(prompt))?.message!!
+        logger.debug { "Selected modules: $selectedModules" }
+        val adaptedModules = createChat(ADAPT_STEP_PROMPT(selectedModules, prompt))?.message!!
+        logger.debug { "Adapted modules: $adaptedModules" }
+        val implementedStructure = createChat(IMPLEMENT_STEP_PROMPT(adaptedModules, prompt))?.message!!
+        logger.debug { "Implemented structure: $implementedStructure" }
+        return createChat(EXECUTE_STEP_PROMPT(implementedStructure, prompt))
+    }
+
+    companion object : Log
 }
