@@ -36,7 +36,7 @@ class IceBreakingServiceTest @Autowired constructor(
             )
         )
 
-        val result = iceBreakingService.getIceBreakingQuestions(userA, userB, useGpt4 = false).result
+        val result = iceBreakingService.getIceBreakingQuestions(userA, userB, useGpt4 = true).result
         assert(result.size == 3)
     }
 

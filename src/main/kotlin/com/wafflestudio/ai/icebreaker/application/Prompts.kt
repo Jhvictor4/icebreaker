@@ -43,7 +43,6 @@ fun iceBreakingSystemPrompt(): String {
         
         Good conversation topics are those that are interesting, not trivial, and specific.
         Try to find AT LEAST one extra information that is not given at the beginning of the conversation.
-        make use of function call if available.
                 
         You should either plan and execute sequence of actions, or finish the conversation by suggesting a list of conversation topic.
         When you make suggestions, you should consider the following:
@@ -52,6 +51,7 @@ fun iceBreakingSystemPrompt(): String {
         - When you make final suggestion, you should wrap result JSON object with <RESPONSE></RESPONSE> tag so that the system can understand the result.
         - Do not just repeat example.
         - Questions should be relevant to both, do not ask question to only one person.
+        - Questions should be based on the concrete information about users that you found.
     """.trimIndent()
 }
 
