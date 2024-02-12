@@ -14,17 +14,19 @@ import org.springframework.stereotype.Component
 
 @Component
 class WeaviateAdapter(
-    private val wvClient: WeaviateClient,
+    private val wvClient: WeaviateClient
 ) : WeaviatePort {
 
     override fun addSchema(className: String) {
         val classObj = WeaviateClass.builder()
             .className(className)
             .vectorizer("text2vec-openai")
-            .moduleConfig(mapOf(
-                "text2vec-openai" to emptyMap<String, Any?>(),
-                "generative-openai" to emptyMap<String, Any?>()
-            ))
+            .moduleConfig(
+                mapOf(
+                    "text2vec-openai" to emptyMap<String, Any?>(),
+                    "generative-openai" to emptyMap<String, Any?>()
+                )
+            )
             .build()
         val res = wvClient.schema().classCreator().withClass(classObj).run()
         if (res.error == null) {
@@ -46,11 +48,13 @@ class WeaviateAdapter(
         for (question in data) {
             val wvObject = WeaviateObject.builder()
                 .className(className)
-                .properties(mapOf(
-                    "answer" to question.answer,
-                    "question" to question.question,
-                    "category" to question.category,
-                ))
+                .properties(
+                    mapOf(
+                        "answer" to question.answer,
+                        "question" to question.question,
+                        "category" to question.category
+                    )
+                )
                 .build()
             batcher = batcher.withObjects(wvObject)
         }
@@ -79,7 +83,6 @@ class WeaviateAdapter(
     }
 
     companion object : Log
-
 }
 
 data class Question(
@@ -88,5 +91,5 @@ data class Question(
     @JsonProperty("Question")
     val question: String,
     @JsonProperty("Category")
-    val category: String,
+    val category: String
 )

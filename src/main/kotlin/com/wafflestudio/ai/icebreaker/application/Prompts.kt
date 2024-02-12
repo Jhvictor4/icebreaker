@@ -27,7 +27,6 @@ fun understandingPrompt(source: String): String {
     """.trimIndent()
 }
 
-
 /**
  * 1. 두 유저의 모든 정보를 요약
  * 2. 두 유저의 정보 가운데 공통적으로 가지고 있는 경험 또는 관심사를 찾아냄
@@ -44,7 +43,6 @@ fun iceBreakingSystemPrompt(): String {
     """.trimIndent()
     // TODO feedback logic 없이 얼마나 잘 할까..
 }
-
 
 fun summarizePrompt(userA: User, userB: User): String {
     return """

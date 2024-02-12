@@ -36,7 +36,7 @@ sealed interface UserInformation {
         }
 
         override fun toDescription(): String {
-            return "전공: 대학교에서는 ${major} 전공을 하고 있어요."
+            return "전공: 대학교에서는 $major 전공을 하고 있어요."
         }
     }
 
@@ -56,13 +56,13 @@ sealed interface UserInformation {
     data class UnderstandingInformation(
         val understanding: Understanding,
         val value: String
-    ): UserInformation {
+    ) : UserInformation {
         override fun toPrompt(): String {
             return "{\"${understanding.name}\": \"$value\"}"
         }
 
         override fun toDescription(): String {
-            return "이해하는 데 도움이 될만한 글의 발췌: ${value}"
+            return "이해하는 데 도움이 될만한 글의 발췌: $value"
         }
     }
 }

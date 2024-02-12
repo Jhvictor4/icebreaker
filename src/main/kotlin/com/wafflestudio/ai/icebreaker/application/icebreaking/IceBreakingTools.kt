@@ -1,19 +1,19 @@
-package com.wafflestudio.ai.icebreaker.application.icebreaking;
+package com.wafflestudio.ai.icebreaker.application.icebreaking
 
 import com.wafflestudio.ai.icebreaker.application.saju.SaJuService
-import com.wafflestudio.ai.icebreaker.application.user.UserInformation
 import com.wafflestudio.ai.icebreaker.application.user.BasicInformationMatch
+import com.wafflestudio.ai.icebreaker.application.user.UserInformation
 import kotlin.reflect.KClass
 
 typealias Clue = String
 
 enum class IceBreakingTools(
     val informationType: KClass<out UserInformation>,
-    val function: IceBreakingToolFactory.(BasicInformationMatch) -> Clue,
+    val function: IceBreakingToolFactory.(BasicInformationMatch) -> Clue
 ) {
     FETCH_SAJU(
         UserInformation.Birthday::class,
-        { birth -> getSaJu(birth) },
+        { birth -> getSaJu(birth) }
     ),
     SEARCH_KEYWORD(
         UserInformation.UnderstandingInformation::class,

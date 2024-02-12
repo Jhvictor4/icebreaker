@@ -1,7 +1,7 @@
 package com.wafflestudio.ai.icebreaker.outbound.understanding
 
-import com.wafflestudio.ai.icebreaker.application.common.ChatGptMessageResponseDto
 import com.wafflestudio.ai.icebreaker.application.common.ChatGptPort
+import com.wafflestudio.ai.icebreaker.application.common.ChatGptResponseDto
 import com.wafflestudio.ai.icebreaker.application.configuration.coroutineContext
 import com.wafflestudio.ai.icebreaker.application.understanding.UnderstandingUseCase
 import kotlinx.coroutines.runBlocking
@@ -12,7 +12,7 @@ class UnderstandingUseCaseAdapter(
     private val client: ChatGptPort
 ) : UnderstandingUseCase {
 
-    override fun understandByUri(uri: String): ChatGptMessageResponseDto? {
+    override fun understandByUri(uri: String): ChatGptResponseDto? {
         return runBlocking(coroutineContext) {
             client.createChat(
                 """

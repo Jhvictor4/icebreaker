@@ -14,7 +14,7 @@ import java.net.URI
  */
 @SpringBootTest
 class WvTempTest @Autowired constructor(
-    val weaviatePort: WeaviatePort,
+    val weaviatePort: WeaviatePort
 ) {
 
     @Test
@@ -37,5 +37,4 @@ class WvTempTest @Autowired constructor(
     fun `유사 텍스트 조회`() {
         weaviatePort.nearTextQuery("Question", "biology")
     }
-
 }
