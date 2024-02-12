@@ -3,11 +3,19 @@ package com.wafflestudio.ai.icebreaker.application.saju
 import com.wafflestudio.ai.icebreaker.application.saju.port.SaJuRelationResponse
 import com.wafflestudio.ai.icebreaker.application.saju.port.SaJuResponse
 import com.wafflestudio.ai.icebreaker.application.saju.port.SaJuUseCase
+import com.wafflestudio.ai.icebreaker.application.user.User
+import com.wafflestudio.ai.icebreaker.application.user.UserInformation
 import org.springframework.stereotype.Component
 import java.time.LocalDateTime
 
 @Component
 class SaJuService : SaJuUseCase {
+
+    override fun explainSaJu(user: User): String {
+        val birthday = user.information.first { it is UserInformation.Birthday } as UserInformation.Birthday
+        return "${getSaJu(birthday.date).saJu})}"
+    }
+
     override fun getSaJu(birth: LocalDateTime): SaJuResponse {
         val saJu = SaJu.from(birth)
         return SaJuResponse(saJu)

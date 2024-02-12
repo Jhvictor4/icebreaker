@@ -197,24 +197,24 @@ enum class 지지(val chinese: String, val animal: String, val yy: 음양, val o
     }
 }
 
-enum class 십이시(val range: ClosedRange<LocalTime>) {
-    자시(LocalTime.of(0, 30)..LocalTime.of(1, 30)),
-    축시(LocalTime.of(1, 30)..LocalTime.of(3, 30)),
-    인시(LocalTime.of(3, 30)..LocalTime.of(5, 30)),
-    묘시(LocalTime.of(5, 30)..LocalTime.of(7, 30)),
-    진시(LocalTime.of(7, 30)..LocalTime.of(9, 30)),
-    사시(LocalTime.of(9, 30)..LocalTime.of(11, 30)),
-    오시(LocalTime.of(11, 30)..LocalTime.of(13, 30)),
-    미시(LocalTime.of(13, 30)..LocalTime.of(15, 30)),
-    신시(LocalTime.of(15, 30)..LocalTime.of(17, 30)),
-    유시(LocalTime.of(17, 30)..LocalTime.of(19, 30)),
-    술시(LocalTime.of(19, 30)..LocalTime.of(21, 30)),
-    해시(LocalTime.of(21, 30)..LocalTime.of(23, 30)),
-    야자시(LocalTime.of(23, 30)..LocalTime.of(0, 30));
+enum class 십이시(val rangeCriteria: (LocalTime) -> Boolean) {
+    자시 ({ time -> time in LocalTime.of(0, 30)..LocalTime.of(1, 30) }),
+    축시 ({ time -> time in LocalTime.of(1, 30)..LocalTime.of(3, 30) }),
+    인시 ({ time -> time in LocalTime.of(3, 30)..LocalTime.of(5, 30) }),
+    묘시 ({ time -> time in LocalTime.of(5, 30)..LocalTime.of(7, 30) }),
+    진시 ({ time -> time in LocalTime.of(7, 30)..LocalTime.of(9, 30) }),
+    사시 ({ time -> time in LocalTime.of(9, 30)..LocalTime.of(11, 30) }),
+    오시 ({ time -> time in LocalTime.of(11, 30)..LocalTime.of(13, 30) }),
+    미시 ({ time -> time in LocalTime.of(13, 30)..LocalTime.of(15, 30) }),
+    신시 ({ time -> time in LocalTime.of(15, 30)..LocalTime.of(17, 30) }),
+    유시 ({ time -> time in LocalTime.of(17, 30)..LocalTime.of(19, 30) }),
+    술시 ({ time -> time in LocalTime.of(19, 30)..LocalTime.of(21, 30) }),
+    해시 ({ time -> time in LocalTime.of(21, 30)..LocalTime.of(23, 30) }),
+    야자시 ({ time -> time.isBefore(LocalTime.of(0, 30)) || time.isAfter(LocalTime.of(23, 30)) });
 
     companion object {
         fun from(time: LocalTime): 십이시 {
-            return values().first { it.range.contains(time) }
+            return values().first { it.rangeCriteria.invoke(time) }
         }
     }
 }

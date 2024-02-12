@@ -7,5 +7,6 @@ enum class Understandable {
 enum class Understanding(val desc: String) {
     LIFE_EXPERIENCE("경험"),
     OUTDOOR_ACTIVITY(""),
-    PLACES_VISITED("가본 장소: ")
+    PLACES_VISITED("가본 장소"),
+    JOB("직업")
 }

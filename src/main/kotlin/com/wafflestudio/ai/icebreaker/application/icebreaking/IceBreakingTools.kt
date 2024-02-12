@@ -6,8 +6,11 @@ import com.aallam.openai.api.chat.ToolType
 import com.aallam.openai.api.core.Parameters
 import kotlinx.serialization.json.*
 
-enum class IceBreakingTools {
-    FORTUNE_TELLING {
+enum class IceBreakingTools(
+    val functionName: String
+) {
+    // TODO MBTI 추가
+    FORTUNE_TELLING("getSaJu") {
         override fun toChatGptTool(): Tool {
             return Tool(
                 ToolType.Function,
@@ -19,7 +22,7 @@ enum class IceBreakingTools {
             )
         }
     },
-    SEARCH_KEYWORD {
+    SEARCH_KEYWORD("searchByKeyword") {
         override fun toChatGptTool(): Tool {
             return Tool(
                 ToolType.Function,
@@ -41,7 +44,57 @@ enum class IceBreakingTools {
                 )
             )
         }
+    },
+    ASK_GPT("askGpt") {
+        override fun toChatGptTool(): Tool {
+            return Tool(
+                ToolType.Function,
+                "useful for when you want to generate text with ChatGPT",
+                FunctionTool(
+                    name = "askGpt",
+                    parameters = Parameters.buildJsonObject {
+                        put("type", "object")
+                        putJsonObject("properties") {
+                            putJsonObject("query") {
+                                put("type", "string")
+                                put("description", "Query to ask GPT")
+                            }
+                        }
+                        putJsonArray("required") {
+                            add("query")
+                        }
+                    }
+                )
+            )
+        }
+    },
+    GENERATE_RESULT("generateResult") {
+        override fun toChatGptTool(): Tool {
+            return Tool(
+                ToolType.Function,
+                "when you are done making suggestions and want to format the result",
+                FunctionTool(
+                    name = "askGpt",
+                    parameters = Parameters.buildJsonObject {
+                        put("type", "object")
+                        putJsonObject("properties") {
+                            putJsonObject("query") {
+                                put("type", "string")
+                                put("description", "Query to format")
+                            }
+                        }
+                        putJsonArray("required") {
+                            add("query")
+                        }
+                    }
+                )
+            )
+        }
     };
 
     abstract fun toChatGptTool(): Tool
+
+    companion object {
+        val entriesAsChatGptTools = entries.map { it.toChatGptTool() }
+    }
 }

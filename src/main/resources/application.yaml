@@ -1,5 +1,6 @@
 openai:
   api-key: YOUR_API_KEY
+  model: gpt-3.5-turbo # or gpt-4-0125-preview
 
 weaviate:
     host: YOUR_HOST

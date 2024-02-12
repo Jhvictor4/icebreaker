@@ -4,40 +4,51 @@ import com.aallam.openai.api.chat.*
 import com.aallam.openai.api.core.Role
 import com.aallam.openai.api.model.ModelId
 import com.aallam.openai.client.OpenAI
+import com.wafflestudio.ai.icebreaker.application.Log
 import com.wafflestudio.ai.icebreaker.application.common.ChatGptPort
 import com.wafflestudio.ai.icebreaker.application.common.ChatGptResponseDto
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
 
 @Component
 class ChatGptAdapter(
-    private val openAI: OpenAI
+    private val openAI: OpenAI,
+    @Value("\${openai.model}")
+    private val model: String
 ) : ChatGptPort {
+
     override suspend fun createChat(
         prompt: String,
         conversations: List<ChatMessage>,
-        tools: List<Tool>
+        tools: List<Tool>,
+        specificModel: String?
     ): ChatGptResponseDto? {
-        val rawResponse = openAI.chatCompletion(
-            request = ChatCompletionRequest(
-                model = ModelId("gpt-3.5-turbo"),
-                messages = prompt
-                    .takeIf { it.isNotEmpty() }
-                    ?.let { ChatMessage(Role.System, it) }
-                    ?.let(::listOf)
-                    .orEmpty() +
-                    conversations,
-                tools = tools,
-                toolChoice = ToolChoice.Auto
+        val rawResponse = try {
+            openAI.chatCompletion(
+                request = ChatCompletionRequest(
+                    model = ModelId(specificModel ?: model),
+                    messages = prompt
+                        .takeIf { it.isNotEmpty() }
+                        ?.let { ChatMessage(Role.System, it) }
+                        ?.let(::listOf)
+                        .orEmpty() +
+                            conversations,
+                    tools = tools.takeIf { it.isNotEmpty() },
+                    toolChoice = ToolChoice.Auto.takeIf { tools.isNotEmpty() }
+                )
             )
-        )
-            .choices
-            .firstOrNull()
-            ?.message
-            ?: return null
+                .choices
+                .firstOrNull()
+                ?.message
+                ?: return null
+        } catch (e: Exception) {
+            logger.error { "Failed to call OpenAI Chat API: $e" }
+            return null
+        }
 
         if (rawResponse.toolCalls.orEmpty().isNotEmpty()) {
             val call = rawResponse.toolCalls!!.first()
-            return ChatGptResponseDto.FunctionCall(call = call)
+            return ChatGptResponseDto.FunctionCall(call = call as ToolCall.Function)
         }
 
         return when (
@@ -57,4 +68,6 @@ class ChatGptAdapter(
             null -> null
         }
     }
+
+    companion object: Log
 }

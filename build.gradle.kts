@@ -15,7 +15,7 @@ group = "com.wafflestudio.ai"
 version = "0.0.1-SNAPSHOT"
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_21
+    sourceCompatibility = JavaVersion.VERSION_19
 }
 
 application {
@@ -42,6 +42,7 @@ dependencies {
     implementation("com.aallam.openai:openai-client:3.6.3")
     implementation("io.ktor:ktor-client-core:$ktor_version")
     implementation("io.ktor:ktor-client-okhttp:$ktor_version")
+    implementation("io.ktor:ktor-client-logging:$ktor_version")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
 }
@@ -56,7 +57,7 @@ tasks.withType<KotlinCompile> {
     kotlinOptions {
         freeCompilerArgs += "-Xjsr305=strict"
         freeCompilerArgs += "-Xcontext-receivers"
-        jvmTarget = "21"
+        jvmTarget = "19"
     }
 }
 

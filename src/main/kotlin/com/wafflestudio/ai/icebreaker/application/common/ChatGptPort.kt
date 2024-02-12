@@ -7,6 +7,7 @@ interface ChatGptPort {
     suspend fun createChat(
         prompt: String,
         conversations: List<ChatMessage> = emptyList(),
-        tools: List<Tool> = emptyList()
+        tools: List<Tool> = emptyList(),
+        specificModel: String? = null
     ): ChatGptResponseDto?
 }

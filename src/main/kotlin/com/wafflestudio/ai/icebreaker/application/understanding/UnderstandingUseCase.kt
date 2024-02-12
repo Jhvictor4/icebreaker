@@ -1,8 +1,8 @@
 package com.wafflestudio.ai.icebreaker.application.understanding
 
-import com.wafflestudio.ai.icebreaker.application.common.ChatGptMessageResponseDto
+import com.wafflestudio.ai.icebreaker.application.common.ChatGptResponseDto
 
 interface UnderstandingUseCase {
 
-    fun understandByUri(uri: String): ChatGptMessageResponseDto?
+    fun understandByUri(uri: String): ChatGptResponseDto?
 }

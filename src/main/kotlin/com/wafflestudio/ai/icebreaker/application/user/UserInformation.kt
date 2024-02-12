@@ -10,6 +10,7 @@ sealed interface UserInformation {
     fun toDescription(): String
 
     data class Birthday(val date: LocalDateTime) : UserInformation {
+
         override fun toPrompt(): String {
             return "{\"Birthday\": \"$date\"}"
         }

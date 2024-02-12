@@ -9,6 +9,6 @@ interface ChatGptResponseDto {
     ) : ChatGptResponseDto
 
     data class FunctionCall(
-        val call: ToolCall
+        val call: ToolCall.Function
     ) : ChatGptResponseDto
 }
