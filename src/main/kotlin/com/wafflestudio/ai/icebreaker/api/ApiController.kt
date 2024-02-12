@@ -1,6 +1,6 @@
 package com.wafflestudio.ai.icebreaker.api
 
-import com.wafflestudio.ai.icebreaker.application.common.ChatGptMessageResponseDto
+import com.wafflestudio.ai.icebreaker.application.common.ChatGptResponseDto
 import com.wafflestudio.ai.icebreaker.application.understanding.UnderstandingUseCase
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -20,7 +20,7 @@ class ApiController(
     @PostMapping("/understanding/by-uri")
     fun understand(
         @RequestBody request: UnderstandByUriRequest
-    ): ChatGptMessageResponseDto? {
+    ): ChatGptResponseDto? {
         return useCase.understandByUri(request.uri)
     }
 }
