@@ -4,9 +4,8 @@ enum class Understandable {
     URI, TEXT, IMAGE
 }
 
-// TODO
-enum class Understanding {
-    LIFE_EXPERIENCE,
-    OUTDOOR_ACTIVITY,
-    PLACES_VISITED
+enum class Understanding(val desc: String) {
+    LIFE_EXPERIENCE("경험"),
+    OUTDOOR_ACTIVITY(""),
+    PLACES_VISITED("가본 장소: ")
 }
