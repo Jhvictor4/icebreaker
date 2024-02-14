@@ -3,6 +3,7 @@ package com.wafflestudio.ai.icebreaker
 import com.github.instagram4j.instagram4j.IGClient
 import com.github.instagram4j.instagram4j.models.media.timeline.*
 import com.github.instagram4j.instagram4j.requests.feed.FeedUserRequest
+import com.github.instagram4j.instagram4j.requests.friendships.FriendshipsFeedsRequest
 import com.github.instagram4j.instagram4j.requests.users.UsersUsernameInfoRequest
 import org.junit.jupiter.api.Test
 
@@ -80,6 +81,16 @@ class InstagramClientTest {
             println(hashTags)
             println("====================")
         }
+    }
+
+    @Test
+    fun `팔로워 조회`() {
+        val req = UsersUsernameInfoRequest("hanwhaeagles_soori")
+        val resp = req.execute(igClient).join()
+
+        val response = FriendshipsFeedsRequest(resp.user.pk, FriendshipsFeedsRequest.FriendshipsFeeds.FOLLOWING).execute(igClient).join()
+        response.users.forEach { println(it.username)
+        println(it.is_verified) }
     }
 
     companion object {
