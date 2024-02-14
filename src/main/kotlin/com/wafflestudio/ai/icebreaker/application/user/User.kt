@@ -7,7 +7,7 @@ data class User(
 ) {
     fun infoToPrompt(): String {
         return """
-            "$name" 님의 정보:
+            이름: "$name"
             ${information.joinToString("\n") { it.toDescription() }}
         """.trimIndent()
     }
