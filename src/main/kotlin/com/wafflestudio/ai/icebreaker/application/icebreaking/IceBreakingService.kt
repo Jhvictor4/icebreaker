@@ -107,9 +107,9 @@ class IceBreakingService(
         val regex = Regex("(?s)<RESPONSE>(.*?)</RESPONSE>")
         val matches = regex.findAll(input)
         return matches.map { it.groupValues[1].trim() }
-                .firstOrNull()
-                ?.let { objectMapper.readValue<FinalQuestions>(it).result }
-                ?: listOf(input)
+            .firstOrNull()
+            ?.let { objectMapper.readValue<FinalQuestions>(it).result }
+            ?: listOf(input)
     }
 
     companion object : Log

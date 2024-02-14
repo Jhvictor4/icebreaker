@@ -30,7 +30,7 @@ repositories {
 
 dependencies {
 //    implementation("org.springframework.boot:spring-boot-starter-data-jdbc")
-    implementation("org.springframework.boot:spring-boot-starter-web")
+    implementation("org.springframework.boot:spring-boot-starter-webflux")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("io.github.microutils:kotlin-logging-jvm:2.0.11")
@@ -38,6 +38,9 @@ dependencies {
     implementation("software.amazon.awssdk:secretsmanager:2.17.276")
     implementation("software.amazon.awssdk:sts:2.17.276")
     implementation("io.weaviate:client:4.5.1")
+
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.0-RC2")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor:1.5.2")
 
     implementation("com.aallam.openai:openai-client:3.6.3")
     implementation("io.ktor:ktor-client-core:$ktor_version")

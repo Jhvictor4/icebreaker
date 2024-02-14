@@ -20,6 +20,23 @@ class IceBreakingToolsCallableRegistry(
 
     operator fun get(functionName: String): suspend (ToolCallWrapper) -> String {
         return when (functionName) {
+            // v2 TODO!!
+            "vector_search" -> { data ->
+                val keyword = objectMapper.readValue(data.toolCall.function.argumentsOrNull.toString(), Map::class.java)["keyword"] as? String
+                "Information of ${data.userA.name} about $keyword: Nothing useful. \n Information of ${data.userB.name} about $keyword: Nothing useful." // TODO
+            }
+            "image_description" -> { data ->
+                val keyword = objectMapper.readValue(data.toolCall.function.argumentsOrNull.toString(), Map::class.java)["keyword"] as? String
+                "Information of ${data.userA.name} about $keyword: Nothing useful. \n Information of ${data.userB.name} about $keyword: Nothing useful." // TODO
+            }
+            "get_saju" -> { data ->
+                val userA = saJuService.explainSaJu(data.userA)
+                val userB = saJuService.explainSaJu(data.userB)
+                "사주팔자 of ${data.userA.name}: $userA \n 사주팔자 of ${data.userB.name}: $userB" // TODO
+            }
+            // v2 TODO!!
+
+            // v1 - Deprecated
             "getSaJu" -> { data ->
                 val userA = saJuService.explainSaJu(data.userA)
                 val userB = saJuService.explainSaJu(data.userB)
