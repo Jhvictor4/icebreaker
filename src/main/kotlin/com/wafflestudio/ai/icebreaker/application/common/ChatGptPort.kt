@@ -15,7 +15,8 @@ interface ChatGptPort {
         prompt: String,
         conversations: List<ChatMessage> = emptyList(),
         tools: List<Tool> = emptyList(),
-        specificModel: String? = null
+        specificModel: String? = null,
+        maxToken: Int? = null,
     ): ChatGptResponseDto?
 
     suspend fun initThread(userA: User, userB: User): Thread

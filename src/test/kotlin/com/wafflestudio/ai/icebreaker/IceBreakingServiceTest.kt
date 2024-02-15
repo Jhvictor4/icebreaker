@@ -6,6 +6,7 @@ import com.wafflestudio.ai.icebreaker.application.icebreaking.IceBreakingService
 import com.wafflestudio.ai.icebreaker.application.understanding.Understanding
 import com.wafflestudio.ai.icebreaker.application.user.User
 import com.wafflestudio.ai.icebreaker.application.user.UserInformation
+import com.wafflestudio.ai.icebreaker.application.user.UserPort
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Test
@@ -16,7 +17,8 @@ import java.time.LocalDateTime
 @SpringBootTest
 class IceBreakingServiceTest @Autowired constructor(
     private val iceBreakingService: IceBreakingService,
-    private val iceBreakingServiceV2: IceBreakingServiceV2
+    private val iceBreakingServiceV2: IceBreakingServiceV2,
+    private val userPort: UserPort,
 ) {
 
     @Test
@@ -68,6 +70,15 @@ class IceBreakingServiceTest @Autowired constructor(
 
         val result = iceBreakingServiceV2.getIceBreakingQuestions(userA, userB, useGpt4 = true).toList()
         print(result)
+    }
+
+    @Test
+    fun test3(): Unit = runBlocking {
+        val userA = userPort.getUser(1L)!!
+        val userB = userPort.getUser(2L)!!
+
+        val result = iceBreakingService.getIceBreakingQuestions(userA, userB, useGpt4 = true).result
+        assert(result.size == 3)
     }
 
     private fun UserInformation(year: Int, month: Int, day: Int): UserInformation.Birthday {

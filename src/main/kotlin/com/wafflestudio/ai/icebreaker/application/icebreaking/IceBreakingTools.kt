@@ -45,6 +45,18 @@ enum class IceBreakingTools(
             )
         }
     },
+    IMAGE_COMPARISON("image_comparison") {
+        override fun toChatGptTool(): Tool {
+            return Tool(
+                ToolType.Function,
+                "compare actual images, not just summarize the content of the images.",
+                FunctionTool(
+                    name = "image_comparison",
+                    parameters = Parameters.Empty
+                )
+            )
+        }
+    },
     ASK_GPT("askGpt") {
         override fun toChatGptTool(): Tool {
             return Tool(
