@@ -47,6 +47,9 @@ dependencies {
     implementation("io.ktor:ktor-client-okhttp:$ktor_version")
     implementation("io.ktor:ktor-client-logging:$ktor_version")
 
+    implementation("com.google.zxing:javase:3.5.3")
+    implementation("com.google.zxing:core:3.5.3")
+
     testImplementation("org.springframework.boot:spring-boot-starter-test")
 }
 
