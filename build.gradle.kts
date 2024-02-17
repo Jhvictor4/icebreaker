@@ -57,8 +57,8 @@ dependencies {
     implementation("com.google.zxing:javase:3.5.3")
     implementation("com.google.zxing:core:3.5.3")
 
-    runtimeOnly("io.r2dbc:r2dbc-h2")
-    runtimeOnly("com.h2database:h2")
+    implementation("io.asyncer:r2dbc-mysql:1.1.0")
+
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
 }
