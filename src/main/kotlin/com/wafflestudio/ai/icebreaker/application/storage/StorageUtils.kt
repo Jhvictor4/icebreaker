@@ -4,10 +4,6 @@ import org.springframework.http.MediaType
 import java.nio.file.Path
 import java.nio.file.Paths
 
-val root: String = "/icebreaker"
-
-val rootPath: Path = Paths.get(root)
-
 fun getFileExtension(fileName: String): MediaType {
     val ext = fileName.substringAfterLast(".", "")
     return when (ext) {

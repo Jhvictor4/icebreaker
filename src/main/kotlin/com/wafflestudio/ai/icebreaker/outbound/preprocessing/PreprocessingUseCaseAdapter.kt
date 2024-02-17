@@ -8,7 +8,7 @@ import com.wafflestudio.ai.icebreaker.application.common.ChatGptPort
 import com.wafflestudio.ai.icebreaker.application.common.ChatGptResponseDto
 import com.wafflestudio.ai.icebreaker.application.preprocessing.PreprocessingUseCase
 import com.wafflestudio.ai.icebreaker.application.storage.getFileExtensionValue
-import com.wafflestudio.ai.icebreaker.application.storage.root
+import com.wafflestudio.ai.icebreaker.application.storage.port.StorageUseCase
 import com.wafflestudio.ai.icebreaker.application.user.UserInformation
 import com.wafflestudio.ai.icebreaker.outbound.user.UserRepository
 import kotlinx.coroutines.CoroutineScope
@@ -22,7 +22,8 @@ import java.util.*
 @Component
 class PreprocessingUseCaseAdapter(
     private val client: ChatGptPort,
-    private val userRepository: UserRepository
+    private val userRepository: UserRepository,
+    private val storageUseCase: StorageUseCase
 ) : PreprocessingUseCase {
 
     override fun summarizeImages(id: Long, images: List<String>) {
@@ -44,7 +45,7 @@ class PreprocessingUseCaseAdapter(
                     ChatMessage(
                         Role.User,
                         images.map { filename ->
-                            val bytes = Files.readAllBytes(Path.of("$root/$id/$filename"))
+                            val bytes = Files.readAllBytes(Path.of("${storageUseCase.getRoot()}/$id/$filename"))
                             val file = Base64.getEncoder().encodeToString(bytes)
                             val extensionValue = getFileExtensionValue(filename)
                             ImagePart("data:$extensionValue;base64,$file", "low")

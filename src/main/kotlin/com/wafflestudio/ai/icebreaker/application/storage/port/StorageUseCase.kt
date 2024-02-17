@@ -6,5 +6,7 @@ import reactor.core.publisher.Mono
 
 interface StorageUseCase {
 
+    fun getRoot(): String
+
     fun save(userId: Long, filePartFlux: Flux<FilePart>): Mono<List<String>>
 }
