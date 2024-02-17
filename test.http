@@ -60,5 +60,6 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyIiwiaWF0IjoxNzA4MTc4MDcxf
 # UserA : meetUpId 를 가지고 누군가 들어왔는지 계속 체크 -> 들어왔으면 채팅방 입장
 # UserB : QR 을 찍어서 -> meetUpId 를 받아서 -> 채팅방 입장
 
+
 ###
 # stream 으로 결과를 받는 flow
