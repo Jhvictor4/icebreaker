@@ -139,12 +139,17 @@ class IceBreakingStreamService(
                 cursor += newHistories.maxOf { it.id }
             }
 
+            val responseCameOut = newHistories.any { it.type == IceBreakingHistory.Type.RESPONSE }
+            if (responseCameOut) {
+                logger.info { "MeetUpId: ${meetUpId} | Polling history | Found response" }
+            }
+
             // delaying
             delay(200)
             updatedMeetUp = meetUpRepository.findByMeetUpId(updatedMeetUp.meetUpId)
                 ?.toDomain()
                 ?: throw ApplicationException.Common("MeetUp not found")
-        } while (updatedMeetUp.status != MeetUpStatus.DONE)
+        } while (updatedMeetUp.status != MeetUpStatus.DONE && !responseCameOut)
 
         // try more
         delay(200)
