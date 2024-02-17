@@ -7,7 +7,8 @@ import org.springframework.stereotype.Component
 
 @Component
 class MeetUpService(
-    private val meetUpRepository: MeetUpRepository
+    private val meetUpRepository: MeetUpRepository,
+    private val requestMeetUpService: RequestMeetUpService
 ) {
     suspend fun myMeetUpStatus(userId: Long, meetUpId: String): MeetUp? {
         return meetUpRepository.findByMeetUpId(meetUpId)?.toDomain()
@@ -20,6 +21,7 @@ class MeetUpService(
             throw IllegalStateException("Invalid meetUpId")
         }
 
+        requestMeetUpService.evictMeetUpId(findRequestedUserId)
         val meetUp = MeetUp.create(
             meetUpId = meetUpId,
             requestedUserId = findRequestedUserId,

@@ -47,4 +47,8 @@ class RequestMeetUpService(cacheManager: CacheManager) {
             MeetUpRequestStatusDto(MeetUpRequestStatus.WAITING, cachedEntry.meetUpId)
         }
     }
+
+    fun evictMeetUpId(userId: Long) {
+        meetUpRequestCache.evict(userId)
+    }
 }
