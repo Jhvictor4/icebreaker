@@ -14,7 +14,6 @@ import org.springframework.r2dbc.core.DatabaseClient
 class R2dbcConfig(
     private val objectMapper: ObjectMapper
 ) {
-
     @Bean
     fun r2dbcCustomConversions(databaseClient: DatabaseClient): R2dbcCustomConversions {
         val dialect = DialectResolver.getDialect(databaseClient.connectionFactory)

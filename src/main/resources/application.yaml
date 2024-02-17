@@ -7,10 +7,7 @@ weaviate:
     api-key: YOUR_API_KEY
     scheme: YOUR_SCHEMA
 
-
 spring:
-  jpa:
-    defer-datasource-initialization: true # 개발용
-#  datasource:
-#    url: r2dbc:h2:mem:///test;DATABASE_TO_UPPER=FALSE
-#    driver-class-name: org.h2.Driver
+  datasource:
+    url: r2dbc:h2:mem:///test;DATABASE_TO_UPPER=FALSE
+    driver-class-name: org.h2.Driver

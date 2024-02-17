@@ -6,7 +6,7 @@ import com.wafflestudio.ai.icebreaker.outbound.user.UserRepository
 import org.springframework.web.bind.annotation.*
 
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("/api/v1/user")
 class UserApiController(
     private val userRepository: UserRepository
 ) {
@@ -18,6 +18,13 @@ class UserApiController(
         return LoginResponse(
             JwtProvider.createAccessToken(userRepository.create(User.create()).id)
         )
+    }
+
+    @GetMapping("/me")
+    suspend fun userMe(
+        user: User // leverages parameterHandlerArgumentResolver
+    ): User {
+        return user
     }
 
     @GetMapping("/{id}")

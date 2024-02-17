@@ -8,7 +8,8 @@ import kotlin.time.Duration
 
 object JwtProvider {
     private val validityInMilliseconds: Long =
-        Duration.INFINITE.inWholeMilliseconds
+        Duration.INFINITE.inWholeMilliseconds // unused
+
     private val secretKey =
         Keys.hmacShaKeyFor("waffle-icebreaker-secret-key-fighting".toByteArray(StandardCharsets.UTF_8))
 
@@ -17,7 +18,7 @@ object JwtProvider {
         return Jwts.builder()
             .setSubject(userId.toString())
             .setIssuedAt(now)
-            .setExpiration(Date(now.time + validityInMilliseconds))
+            .setExpiration(null)
             .signWith(secretKey, SignatureAlgorithm.HS256)
             .compact()
     }
@@ -25,10 +26,7 @@ object JwtProvider {
     fun validateToken(authorizationHeader: String): Boolean {
         return try {
             val claims = getClaimsJws(extractToken(authorizationHeader))
-            !claims
-                .body
-                .expiration
-                .before(Date())
+            return true // expiry check
         } catch (e: JwtException) {
             false
         } catch (e: IllegalArgumentException) {

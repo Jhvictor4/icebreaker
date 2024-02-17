@@ -6,7 +6,7 @@ import org.springframework.data.annotation.Id
 import org.springframework.data.relational.core.mapping.Column
 import org.springframework.data.relational.core.mapping.Table
 
-@Table("icebreaking_user")
+@Table("ice_breaking_users")
 data class UserEntity(
     @Id
     @Column("id")
@@ -14,13 +14,13 @@ data class UserEntity(
     @Column("name")
     val name: String,
     @Column("detail")
-    val detail: List<UserInformation>
+    val detail: UserInformationEntity
 ) {
     fun toUser(): User {
         return User(
             id = id,
             name = name,
-            information = detail
+            information = detail.detail
         )
     }
 
@@ -29,8 +29,13 @@ data class UserEntity(
             return UserEntity(
                 id = user.id,
                 name = user.name,
-                detail = user.information
+                detail = UserInformationEntity(user.information)
             )
         }
     }
 }
+
+// converter 에서 콜렉션 직접 변환을 지원하지 않아서 wrapping. entity level 에서만
+data class UserInformationEntity(
+    val detail: List<UserInformation>
+)
