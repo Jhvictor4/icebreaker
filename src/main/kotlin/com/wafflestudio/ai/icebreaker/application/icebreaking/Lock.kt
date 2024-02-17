@@ -12,6 +12,18 @@ object Lock : Log {
         lockMap.remove(key)
     }
 
+    fun <T : Any?> withSynchronousLock(key: String, func: () -> T): T {
+        do {
+            val lock = lockMap.putIfAbsent(key, true)
+        } while (lock != null)
+
+        logger.debug { "locked $key" }
+        val result = func.invoke()
+        release(key)
+        logger.debug { "released $key with result $result" }
+        return result
+    }
+
     suspend fun <T : Any?> withLock(key: String, func: suspend () -> T): T = coroutineScope {
         while (lockMap.putIfAbsent(key, true) != null) {
             yield()

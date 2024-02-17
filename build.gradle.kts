@@ -42,6 +42,8 @@ dependencies {
     runtimeOnly("io.jsonwebtoken:jjwt-impl:0.11.5")
     runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.11.5")
 
+    implementation("org.springdoc:springdoc-openapi-starter-webflux-ui:2.3.0")
+
     implementation("software.amazon.awssdk:secretsmanager:2.17.276")
     implementation("software.amazon.awssdk:sts:2.17.276")
     implementation("io.weaviate:client:4.5.1")
@@ -58,7 +60,6 @@ dependencies {
     implementation("com.google.zxing:core:3.5.3")
 
     implementation("io.asyncer:r2dbc-mysql:1.1.0")
-
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
 }

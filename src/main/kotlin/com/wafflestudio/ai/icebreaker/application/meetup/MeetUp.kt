@@ -15,7 +15,7 @@ enum class MeetUpRequestStatus {
 
 data class MeetUpRequestStatusDto(
     val status: MeetUpRequestStatus,
-    val meetUpId: MeetUpId?
+    val meetUpId: String?
 )
 
 // 생성된 meetUp Room

@@ -1,5 +1,6 @@
 package com.wafflestudio.ai.icebreaker.application.saju
 
+import com.wafflestudio.ai.icebreaker.api.ApplicationException
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
@@ -348,7 +349,7 @@ enum class 절기(val month: Int, val 지지: 지지) {
         private val cachedByMonth = values().associateBy { it.month }
 
         fun findByMonth(month: Int): 절기 {
-            return cachedByMonth[month] ?: throw IllegalArgumentException("절기를 찾을 수 없습니다: $month")
+            return cachedByMonth[month] ?: throw ApplicationException.Common("절기를 찾을 수 없습니다: $month")
         }
     }
 }

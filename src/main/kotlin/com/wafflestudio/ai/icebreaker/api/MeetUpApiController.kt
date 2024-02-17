@@ -36,6 +36,7 @@ class MeetUpApiController(
     /**
      * User A shares QR with a meet-up id
      */
+    @Deprecated("클라에서 QR 직접")
     @PostMapping("/make-qr")
     fun getQRCode(
         user: User,

@@ -56,7 +56,7 @@ class TestController(
                             objectMapper.readValue<Response.FinalResult>(result.single()).result
                         }.getOrElse {
                             IceBreakingService.logger.error { "Failed to parse result: $result" }
-                            throw it
+                            throw ApplicationException.Common(it.message.orEmpty())
                         }
                     )
                 } else {

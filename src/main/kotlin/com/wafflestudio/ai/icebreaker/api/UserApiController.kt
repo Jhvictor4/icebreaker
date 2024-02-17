@@ -35,7 +35,7 @@ class UserApiController(
     suspend fun get(
         @PathVariable id: Long
     ): User {
-        return userRepository.getUser(id) ?: throw IllegalArgumentException("User not found")
+        return userRepository.getUser(id) ?: throw ApplicationException.Common("User not found")
     }
 
     @PostMapping("/basicInformation")

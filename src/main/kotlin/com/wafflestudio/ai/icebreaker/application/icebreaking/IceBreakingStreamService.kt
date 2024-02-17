@@ -3,6 +3,7 @@ package com.wafflestudio.ai.icebreaker.application.icebreaking
 import com.aallam.openai.api.BetaOpenAI
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
+import com.wafflestudio.ai.icebreaker.api.ApplicationException
 import com.wafflestudio.ai.icebreaker.application.meetup.MeetUp
 import com.wafflestudio.ai.icebreaker.application.meetup.MeetUpId
 import com.wafflestudio.ai.icebreaker.application.meetup.MeetUpStatus
@@ -46,13 +47,13 @@ class IceBreakingStreamService(
         val decision = Lock.withLock(meetUpId.id) {
             val meetUp = meetUpRepository.findByMeetUpId(meetUpId.id)
                 ?.toDomain()
-                ?: throw IllegalStateException("MeetUp not found")
+                ?: throw ApplicationException.Common("MeetUp not found")
 
             val userA = userRepository.getUser(meetUp.userAId)
-                ?: throw IllegalStateException("User not found")
+                ?: throw ApplicationException.Common("User not found")
 
             val userB = userRepository.getUser(meetUp.userBId)
-                ?: throw IllegalStateException("User not found")
+                ?: throw ApplicationException.Common("User not found")
 
             val status = meetUp.status
             val strategy = when (status) {

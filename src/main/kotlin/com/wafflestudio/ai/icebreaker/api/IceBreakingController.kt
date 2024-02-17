@@ -1,6 +1,5 @@
 package com.wafflestudio.ai.icebreaker.api
 
-import com.aallam.openai.api.BetaOpenAI
 import com.wafflestudio.ai.icebreaker.application.icebreaking.*
 import com.wafflestudio.ai.icebreaker.application.meetup.MeetUpId
 import com.wafflestudio.ai.icebreaker.application.user.User

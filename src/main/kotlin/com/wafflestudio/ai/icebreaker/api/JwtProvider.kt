@@ -54,7 +54,7 @@ object JwtProvider {
             .also { check(it.first() == TOKEN_TYPE) }
             .last()
     } catch (e: Exception) {
-        throw IllegalArgumentException("Invalid token")
+        throw ApplicationException.Common("Invalid token")
     }
 
     private const val TOKEN_TYPE = "Bearer"

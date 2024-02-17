@@ -1,5 +1,6 @@
 package com.wafflestudio.ai.icebreaker.application.configuration
 
+import com.wafflestudio.ai.icebreaker.api.ApplicationException
 import com.wafflestudio.ai.icebreaker.application.Log
 import io.weaviate.client.Config
 import io.weaviate.client.WeaviateAuthClient
@@ -22,7 +23,7 @@ class WvClientConfig(
             if (meta.error == null) {
                 logger.info { "Weaviate client is successfully initialized | ${meta.result.version}" }
             } else {
-                throw RuntimeException("Weaviate client is failed to initialize | ${meta.error.messages}")
+                throw ApplicationException.Common("Weaviate client is failed to initialize | ${meta.error.messages}")
             }
         }
     }
