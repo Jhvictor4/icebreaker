@@ -73,8 +73,7 @@ class IceBreakingStreamService(
             StrategyDecision(meetUp, userA, userB, strategy)
         }
 
-//        logger.info { "[TEST] UserId: ${requestUserId}, MeetUpId: ${meetUpId.id} Selected strategy: ${decision.strategy}" }
-
+        logger.info { "[TEST] UserId: ${requestUserId}, MeetUpId: ${meetUpId.id} Selected strategy: ${decision.strategy}" }
         return when (decision.strategy) {
             StreamStrategy.LISTEN_TO_OPENAI -> initGptAndStream(decision.meetUp, decision.userA, decision.userB)
             StreamStrategy.POLL_HISTORY -> pollHistory(decision.meetUp)

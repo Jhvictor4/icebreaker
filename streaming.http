@@ -1,10 +1,10 @@
 ### user 1. 2 동시에 스트림 처리 받아내는지 확인
 
 POST https://icebreaker.wafflestudio.com/api/v1/icebreaking/generate
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNzA4MTg0MDA5fQ.yoOq2xbA3CCT8BqNBA_f22i7mbESLvs4YnG3IHhJyaM
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI0MSIsImlhdCI6MTcwODIwODcwMH0.uCJMF9cYO5vWDYEzF33j0Fc3oFcxkvh-MmsdQGNFq-8
 Content-Type: application/stream+json
 
-{ "id": "390ba323-69a4-4e09-ad06-9c0c41b31768::1" }
+{ "id": "290b72b2-7f6d-420d-a0b2-1c64b03b3c9e::41" }
 
 ###
 
