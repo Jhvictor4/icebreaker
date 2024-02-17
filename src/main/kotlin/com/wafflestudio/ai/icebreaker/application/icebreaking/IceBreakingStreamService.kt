@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import com.wafflestudio.ai.icebreaker.api.ApplicationException
 import com.wafflestudio.ai.icebreaker.application.FinalQuestions
+import com.wafflestudio.ai.icebreaker.application.Log
 import com.wafflestudio.ai.icebreaker.application.meetup.MeetUp
 import com.wafflestudio.ai.icebreaker.application.meetup.MeetUpId
 import com.wafflestudio.ai.icebreaker.application.meetup.MeetUpStatus
@@ -40,7 +41,7 @@ class IceBreakingStreamService(
         POLL_HISTORY
     }
 
-    suspend fun getIceBreakingStream(meetUpId: MeetUpId): Flow<IceBreakingStreamResponse> {
+    suspend fun getIceBreakingStream(requestUserId: Long, meetUpId: MeetUpId): Flow<IceBreakingStreamResponse> {
         // select - and - update
         val decision = Lock.withLock(meetUpId.id) {
             val meetUp = meetUpRepository.findByMeetUpId(meetUpId.id)
@@ -67,6 +68,8 @@ class IceBreakingStreamService(
 
             StrategyDecision(meetUp, userA, userB, strategy)
         }
+
+//        logger.info { "[TEST] UserId: ${requestUserId}, MeetUpId: ${meetUpId.id} Selected strategy: ${decision.strategy}" }
 
         return when (decision.strategy) {
             StreamStrategy.LISTEN_TO_OPENAI -> initGptAndStream(decision.meetUp, decision.userA, decision.userB)
@@ -117,7 +120,7 @@ class IceBreakingStreamService(
         var cursor = 0L
         do {
             val newHistories = iceBreakingHistoryRepository
-                .findAllByMeetUpIdAndIdGreaterThanOrderById(meetUpId, 0)
+                .findAllByMeetUpIdAndIdGreaterThanOrderById(meetUpId, cursor)
                 .map { it.toDomain() }
 
             if (newHistories.isNotEmpty()) {
@@ -130,4 +133,6 @@ class IceBreakingStreamService(
                 ?: throw ApplicationException.Common("MeetUp not found")
         } while (updatedMeetUp.status != MeetUpStatus.DONE)
     }
+
+    companion object: Log
 }

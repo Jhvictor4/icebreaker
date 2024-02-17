@@ -21,6 +21,6 @@ class IceBreakingController(
         user: User,
         @RequestBody meetUpId: MeetUpId
     ): Flow<IceBreakingStreamResponse> {
-        return iceBreakingStreamService.getIceBreakingStream(meetUpId)
+        return iceBreakingStreamService.getIceBreakingStream(user.id, meetUpId)
     }
 }
