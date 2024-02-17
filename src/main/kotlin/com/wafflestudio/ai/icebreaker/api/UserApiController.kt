@@ -1,7 +1,6 @@
 package com.wafflestudio.ai.icebreaker.api
 
 import com.fasterxml.jackson.annotation.JsonFormat
-import com.nimbusds.openid.connect.sdk.claims.UserInfo
 import com.wafflestudio.ai.icebreaker.application.Log
 import com.wafflestudio.ai.icebreaker.application.user.User
 import com.wafflestudio.ai.icebreaker.application.user.UserInformation
@@ -40,13 +39,12 @@ class UserApiController(
 
     @PostMapping("/basicInformation")
     suspend fun addBasicInformation(
-        user: User,
         @RequestBody basicInformation: BasicInformation
-    ) {
+    ): LoginResponse {
         logger.info { basicInformation }
-        basicInformation.name?.let {
-            user.name = it
-        }
+        val user = User.create()
+        val userId = userRepository.create(user).id
+        user.name = basicInformation.name ?: throw IllegalArgumentException("require name parameter")
         val newUserInfo = mutableListOf<UserInformation>()
         basicInformation.birthDay?.let {
             newUserInfo.add(UserInformation.Birthday(it))
@@ -61,15 +59,14 @@ class UserApiController(
             newUserInfo.add(UserInformation.Major(it))
         }
 
-        for (userInfo in user.information) {
-            if (userInfo is UserInformation.ImageSummary || userInfo is UserInformation.ImageUrl) {
-                newUserInfo.add(userInfo)
-            }
-        }
+        newUserInfo.addAll(user.information.filter { it is UserInformation.ImageSummary || it is UserInformation.ImageUrl })
 
         // 신규 데이터 삽입
         user.information = newUserInfo
         userRepository.create(user)
+        return LoginResponse(
+            JwtProvider.createAccessToken(userId)
+        )
     }
 
     data class BasicInformation(
