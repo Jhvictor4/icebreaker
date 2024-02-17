@@ -8,6 +8,7 @@ import kotlinx.coroutines.reactor.mono
 import org.springframework.core.MethodParameter
 import org.springframework.stereotype.Component
 import org.springframework.web.reactive.BindingContext
+import org.springframework.web.reactive.config.CorsRegistry
 import org.springframework.web.reactive.config.WebFluxConfigurer
 import org.springframework.web.reactive.result.method.HandlerMethodArgumentResolver
 import org.springframework.web.reactive.result.method.annotation.ArgumentResolverConfigurer
@@ -18,6 +19,12 @@ import reactor.core.publisher.Mono
 class UserResolver(
     private val userRepository: UserRepository
 ) : WebFluxConfigurer {
+
+    override fun addCorsMappings(registry: CorsRegistry) {
+        registry.addMapping("/**")
+            .allowedMethods("*")
+            .allowedOrigins("*")
+    }
 
     override fun configureArgumentResolvers(configurer: ArgumentResolverConfigurer) {
         configurer.addCustomResolver(UserHandlerMethodArgumentResolver())
