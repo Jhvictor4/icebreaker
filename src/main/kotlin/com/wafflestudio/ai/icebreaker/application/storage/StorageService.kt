@@ -36,7 +36,7 @@ class StorageService(
     }
 
     override fun save(userId: Long, filePartFlux: Flux<FilePart>): Mono<List<String>> {
-        return filePartFlux.doOnNext { logger.info { "upload image" } }.flatMap { filePart ->
+        return filePartFlux.flatMap { filePart ->
             val userDirectory = rootPath.resolve(userId.toString())
             getFileExtension(filePart.filename())
             if (!Files.exists(userDirectory)) {

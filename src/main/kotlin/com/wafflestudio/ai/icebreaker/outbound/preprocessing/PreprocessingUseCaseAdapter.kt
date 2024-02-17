@@ -65,7 +65,6 @@ class PreprocessingUseCaseAdapter(
             newUserInfo.add(UserInformation.ImageSummary(summaryText))
             user.information = newUserInfo
             userRepository.create(user)
-            logger.info { "insert summaryText" }
         }
     }
 
