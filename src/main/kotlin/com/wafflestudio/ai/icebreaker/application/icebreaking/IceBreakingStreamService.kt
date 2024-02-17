@@ -115,7 +115,7 @@ class IceBreakingStreamService(
             ?: throw ApplicationException.Common("MeetUp not found")
 
         var cursor = 0L
-        while (updatedMeetUp.status != MeetUpStatus.DONE) {
+        do {
             val newHistories = iceBreakingHistoryRepository
                 .findAllByMeetUpIdAndIdGreaterThanOrderById(meetUpId, 0)
                 .map { it.toDomain() }
@@ -128,6 +128,6 @@ class IceBreakingStreamService(
             updatedMeetUp = meetUpRepository.findByMeetUpId(updatedMeetUp.meetUpId)
                 ?.toDomain()
                 ?: throw ApplicationException.Common("MeetUp not found")
-        }
+        } while (updatedMeetUp.status != MeetUpStatus.DONE)
     }
 }
