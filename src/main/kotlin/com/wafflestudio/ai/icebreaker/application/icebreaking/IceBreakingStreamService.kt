@@ -6,6 +6,7 @@ import com.fasterxml.jackson.module.kotlin.readValue
 import com.wafflestudio.ai.icebreaker.api.ApplicationException
 import com.wafflestudio.ai.icebreaker.application.FinalQuestions
 import com.wafflestudio.ai.icebreaker.application.Log
+import com.wafflestudio.ai.icebreaker.application.common.WeaviatePort
 import com.wafflestudio.ai.icebreaker.application.meetup.MeetUp
 import com.wafflestudio.ai.icebreaker.application.meetup.MeetUpId
 import com.wafflestudio.ai.icebreaker.application.meetup.MeetUpStatus
@@ -29,7 +30,8 @@ class IceBreakingStreamService(
     private val iceBreakingServiceV2: IceBreakingServiceV2,
     private val iceBreakingService: IceBreakingService,
     private val iceBreakingHistoryRepository: IceBreakingHistoryRepository,
-    private val objectMapper: ObjectMapper
+    private val objectMapper: ObjectMapper,
+    private val weaviatePort: WeaviatePort,
 ) {
     private data class StrategyDecision(
         val meetUp: MeetUp,
@@ -85,10 +87,17 @@ class IceBreakingStreamService(
             .map {
                 val stringResponse = it.textContent()
                 if (iceBreakingService.isResultAnswer(stringResponse)) {
+                    val resultCardNo = mutableListOf<Int>()
                     IceBreakingStreamResponse.FinalQuestion(
                         runCatching {
-                            val cardNo = Random.nextInt(20) + 1
-                            objectMapper.readValue<List<IceBreakingStreamResponse.Question>>(extract(stringResponse)).map { IceBreakingStreamResponse.Result(it.question, it.keywords, cardNo) }
+                            objectMapper.readValue<List<IceBreakingStreamResponse.Question>>(extract(stringResponse)).map {
+                                var cardNo = weaviatePort.nearTextQuery("Taro", keywords = it.keywords)
+                                if (cardNo == null || cardNo in resultCardNo) {
+                                    cardNo = Random.nextInt(20) + 1
+                                }
+                                resultCardNo.add(cardNo)
+                                IceBreakingStreamResponse.Result(it.question, it.keywords, cardNo)
+                            }
                         }.getOrElse {
                             IceBreakingService.logger.error { "Failed to parse result: $stringResponse" }
                             throw it

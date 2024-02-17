@@ -9,16 +9,21 @@ import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 
+
 @Configuration
 class WvClientConfig(
     @Value("\${weaviate.host}") private val host: String,
     @Value("\${weaviate.scheme}") private val scheme: String,
-    @Value("\${weaviate.api-key}") private val apiKey: String
+    @Value("\${weaviate.api-key}") private val apiKey: String,
+    @Value("\${openai.api-key}") private val openAiApiKey: String,
 ) {
 
     @Bean
     fun wvClient(): WeaviateClient {
-        return WeaviateAuthClient.apiKey(Config(scheme, host), apiKey).also {
+        val headers = mapOf(
+            "X-OpenAI-Api-Key" to openAiApiKey
+        )
+        return WeaviateAuthClient.apiKey(Config(scheme, host, headers), apiKey).also {
             val meta = it.misc().metaGetter().run()
             if (meta.error == null) {
                 logger.info { "Weaviate client is successfully initialized | ${meta.result.version}" }
