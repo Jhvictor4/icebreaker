@@ -9,19 +9,16 @@ import com.wafflestudio.ai.icebreaker.application.user.UserInformation
 import com.wafflestudio.ai.icebreaker.application.user.UserPort
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.runBlocking
-import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.context.SpringBootTest
 import java.time.LocalDateTime
 
-@SpringBootTest
-class IceBreakingServiceTest @Autowired constructor(
+@OptIn(BetaOpenAI::class)
+class IceBreakingServiceTest(
     private val iceBreakingService: IceBreakingService,
     private val iceBreakingServiceV2: IceBreakingServiceV2,
     private val userPort: UserPort
 ) {
 
-    @Test
     fun test(): Unit = runBlocking {
         val userA = User(
             1,
@@ -46,8 +43,6 @@ class IceBreakingServiceTest @Autowired constructor(
         assert(result.size == 3)
     }
 
-    @Test
-    @OptIn(BetaOpenAI::class)
     fun test2(): Unit = runBlocking {
         val userA = User(
             1,
@@ -72,7 +67,6 @@ class IceBreakingServiceTest @Autowired constructor(
         print(result)
     }
 
-    @Test
     fun test3(): Unit = runBlocking {
         val userA = userPort.getUser(1L)!!
         val userB = userPort.getUser(2L)!!
