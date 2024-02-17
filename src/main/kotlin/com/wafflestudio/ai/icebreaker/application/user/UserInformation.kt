@@ -11,12 +11,16 @@ sealed interface UserInformation {
     }
 
     val type: UserInformationType
+    val value: Any
 
     // not used
     fun toPrompt(): String
     fun toDescription(): String
 
     data class Birthday(val date: LocalDateTime) : UserInformation {
+
+        override val value: String
+            get() = date.toString()
 
         override fun toPrompt(): String {
             return "{\"Birthday\": \"$date\"}"
@@ -32,6 +36,9 @@ sealed interface UserInformation {
     enum class Gender : UserInformation {
         MALE, FEMALE;
 
+        override val value: String
+            get() = this.name
+
         override fun toPrompt(): String {
             return "{\"Gender\": \"$this\"}"
         }
@@ -45,6 +52,10 @@ sealed interface UserInformation {
     }
 
     data class Major(val major: String) : UserInformation {
+
+        override val value: String
+            get() = major
+
         override fun toPrompt(): String {
             return "{\"Major\": \"$major\"}"
         }
@@ -61,6 +72,9 @@ sealed interface UserInformation {
         ENFP, ENFJ, ENTJ, ENTP, ESFJ, ESFP, ESTJ, ESTP,
         INFJ, INFP, INTJ, INTP, ISFJ, ISFP, ISTJ, ISTP;
 
+        override val value: String
+            get() = name
+
         override fun toPrompt(): String {
             return "{\"MBTI\": \"$this\"}"
         }
@@ -73,7 +87,11 @@ sealed interface UserInformation {
         override val type: UserInformationType = UserInformationType.MBTI
     }
 
-    data class ImageSummary(val text: String): UserInformation {
+    data class ImageSummary(val text: String) : UserInformation {
+
+        override val value: String
+            get() = text
+
         override fun toPrompt(): String {
             return "{\"ImageSummaryText\": \"${text}\"}"
         }
@@ -87,6 +105,10 @@ sealed interface UserInformation {
     }
 
     data class ImageUrl(val imageUrl: List<String>) : UserInformation {
+
+        override val value: List<String>
+            get() = imageUrl
+
         override fun toPrompt(): String {
             return ""
         }
@@ -101,7 +123,7 @@ sealed interface UserInformation {
 
     data class UnderstandingInformation(
         val understanding: Understanding,
-        val value: String
+        override val value: String
     ) : UserInformation {
         override fun toPrompt(): String {
             return "{\"${understanding.name}\": \"$value\"}"

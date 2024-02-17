@@ -19,6 +19,6 @@ class IceBreakingController(
         user: User,
         meetUpId: MeetUpId
     ): Flux<IceBreakingStreamResponse> {
-        return iceBreakingStreamService.getIceBreakingStream(meetUpId).asFlux()  // TODO
+        return iceBreakingStreamService.getIceBreakingStream(meetUpId).asFlux() // TODO
     }
 }

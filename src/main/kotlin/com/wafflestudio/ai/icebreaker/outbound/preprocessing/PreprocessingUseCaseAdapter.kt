@@ -22,7 +22,7 @@ import java.util.*
 @Component
 class PreprocessingUseCaseAdapter(
     private val client: ChatGptPort,
-    private val userRepository: UserRepository,
+    private val userRepository: UserRepository
 ) : PreprocessingUseCase {
 
     override fun summarizeImages(id: Long, images: List<String>) {
@@ -44,10 +44,10 @@ class PreprocessingUseCaseAdapter(
                     ChatMessage(
                         Role.User,
                         images.map { filename ->
-                            val bytes = Files.readAllBytes(Path.of("${root}/$id/${filename}"))
+                            val bytes = Files.readAllBytes(Path.of("$root/$id/$filename"))
                             val file = Base64.getEncoder().encodeToString(bytes)
                             val extensionValue = getFileExtensionValue(filename)
-                            ImagePart("data:${extensionValue};base64,${file}", "low")
+                            ImagePart("data:$extensionValue;base64,$file", "low")
                         }
                     )
                 ),

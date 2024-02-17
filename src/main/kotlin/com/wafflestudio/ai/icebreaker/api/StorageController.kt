@@ -13,12 +13,11 @@ import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
 import java.nio.file.Paths
 
-
 @RestController
 @RequestMapping("/api/v1")
 class StorageController(
     val storageUseCase: StorageUseCase,
-    val preprocessingUserCase: PreprocessingUseCase,
+    val preprocessingUserCase: PreprocessingUseCase
 ) {
 
     @PostMapping("/upload")
@@ -34,7 +33,7 @@ class StorageController(
 
     @GetMapping("/image/{filename}")
     fun getImage(user: User, @PathVariable filename: String): ResponseEntity<UrlResource> {
-        val filePath = Paths.get("${root}/${user.id}/${filename}")
+        val filePath = Paths.get("$root/${user.id}/$filename")
         val resource = UrlResource(filePath.toUri())
         if (!resource.exists() && !resource.isReadable) {
             throw RuntimeException()
@@ -43,5 +42,4 @@ class StorageController(
             .contentType(getFileExtension(filename))
             .body(resource)
     }
-
 }

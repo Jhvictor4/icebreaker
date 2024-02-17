@@ -7,5 +7,4 @@ import reactor.core.publisher.Mono
 interface StorageUseCase {
 
     fun save(userId: Long, filePartFlux: Flux<FilePart>): Mono<List<String>>
-
 }

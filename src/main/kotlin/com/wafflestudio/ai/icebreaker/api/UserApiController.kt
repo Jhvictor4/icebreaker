@@ -1,10 +1,10 @@
 package com.wafflestudio.ai.icebreaker.api
 
 import com.fasterxml.jackson.annotation.JsonFormat
+import com.fasterxml.jackson.databind.ObjectMapper
 import com.wafflestudio.ai.icebreaker.application.Log
 import com.wafflestudio.ai.icebreaker.application.user.User
 import com.wafflestudio.ai.icebreaker.application.user.UserInformation
-import com.wafflestudio.ai.icebreaker.outbound.user.UserEntity
 import com.wafflestudio.ai.icebreaker.outbound.user.UserRepository
 import org.springframework.web.bind.annotation.*
 import java.time.LocalDateTime
@@ -12,7 +12,8 @@ import java.time.LocalDateTime
 @RestController
 @RequestMapping("/api/v1/user")
 class UserApiController(
-    private val userRepository: UserRepository
+    private val userRepository: UserRepository,
+    private val objectMapper: ObjectMapper
 ) {
 
     data class LoginResponse(val loginToken: String)
@@ -24,11 +25,31 @@ class UserApiController(
         )
     }
 
+    data class UserResponse(
+        val id: Long,
+        val name: String,
+        val information: List<UserInformationResponse>
+    )
+
+    data class UserInformationResponse(
+        val type: UserInformation.UserInformationType,
+        val value: String
+    )
+
     @GetMapping("/me")
     suspend fun userMe(
         user: User // leverages parameterHandlerArgumentResolver
-    ): UserEntity {
-        return UserEntity.from(user)
+    ): UserResponse {
+        return UserResponse(
+            id = user.id,
+            name = user.name,
+            information = user.information.map {
+                UserInformationResponse(
+                    type = it.type,
+                    value = objectMapper.writeValueAsString(it.value)
+                )
+            }
+        )
     }
 
     @GetMapping("/{id}")
@@ -76,9 +97,8 @@ class UserApiController(
         var birthDay: LocalDateTime? = null,
         var gender: UserInformation.Gender? = null,
         var mbti: UserInformation.MBTI? = null,
-        var major: String? = null,
+        var major: String? = null
     )
 
     companion object : Log
-
 }

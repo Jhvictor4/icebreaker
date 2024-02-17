@@ -42,5 +42,4 @@ class StorageService : StorageUseCase {
     }
 
     companion object : Log
-
 }
