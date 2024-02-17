@@ -16,7 +16,7 @@ import java.util.*
 
 @Service
 class StorageService(
-    @Value("\${icebreaker.storage.root:/icebreaker}") rootPath: String
+    @Value("\${storage.root}") rootPath: String
 ) : StorageUseCase {
     val rootPath: Path = Paths.get(rootPath)
 

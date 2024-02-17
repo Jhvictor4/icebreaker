@@ -12,3 +12,6 @@ weaviate:
     host: YOUR_HOST
     api-key: YOUR_API_KEY
     scheme: YOUR_SCHEMA
+
+storage:
+  root: ${STORAGE_ROOT:/icebreaker}
