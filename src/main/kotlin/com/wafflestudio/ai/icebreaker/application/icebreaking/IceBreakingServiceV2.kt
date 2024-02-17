@@ -13,6 +13,7 @@ import com.aallam.openai.api.run.ToolOutput
 import com.aallam.openai.api.thread.Thread
 import com.aallam.openai.client.OpenAI
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.wafflestudio.ai.icebreaker.api.ApplicationException
 import com.wafflestudio.ai.icebreaker.application.*
 import com.wafflestudio.ai.icebreaker.application.common.ChatGptPort
 import com.wafflestudio.ai.icebreaker.application.user.User
@@ -117,7 +118,7 @@ fun Message.textContent(): String {
     return contents.joinToString("\n") {
         when (it) {
             is MessageContent.Text -> it.text.value
-            else -> throw IllegalStateException("Unexpected message content: $content")
+            else -> throw ApplicationException.Common("Unexpected message content: $content")
         }
     }
 }

@@ -1,5 +1,6 @@
 package com.wafflestudio.ai.icebreaker.application.configuration
 
+import com.wafflestudio.ai.icebreaker.api.ApplicationException
 import com.wafflestudio.ai.icebreaker.api.JwtProvider
 import com.wafflestudio.ai.icebreaker.application.user.User
 import com.wafflestudio.ai.icebreaker.outbound.user.UserRepository
@@ -39,11 +40,11 @@ class UserResolver(
 
             JwtProvider.validateToken(header)
             val userId = JwtProvider.getPayload(header).toLongOrNull()
-                ?: throw IllegalArgumentException("Invalid token")
+                ?: throw ApplicationException.Common("Invalid token")
 
             return mono {
                 userRepository.getUser(userId)
-                    ?: throw IllegalArgumentException("User not found")
+                    ?: throw ApplicationException.Common("User not found")
             }
         }
     }

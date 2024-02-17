@@ -1,2 +1,39 @@
-POST localhost:8080/api/v1/test
-Content-Type: application/stream+json
+# 로그인
+POST localhost:8080/api/v1/user/login
+
+###
+# 로그인
+GET localhost:8080/api/v1/user/me
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyIiwiaWF0IjoxNzA4MTc4MDcxfQ.VKSQtPmZpr-s0XuGwfqWz7cPZg3QgHoDsuDmqtc26cQ
+
+###
+# 정보 수정 (by 영인)
+
+
+###
+# 내가 현재 QR을 만들었는가?
+GET localhost:8080/api/v1/meet/request/status
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyIiwiaWF0IjoxNzA4MTc4MDcxfQ.VKSQtPmZpr-s0XuGwfqWz7cPZg3QgHoDsuDmqtc26cQ
+
+###
+# 1. 없음 -> QR 생성
+POST localhost:8080/api/v1/meet/request
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyIiwiaWF0IjoxNzA4MTc4MDcxfQ.VKSQtPmZpr-s0XuGwfqWz7cPZg3QgHoDsuDmqtc26cQ
+
+#### QR 만드는 API => 클라에 띄우고
+POST localhost:8080/api/v1/meet/make-qr?meetUpId=4a16333d-b218-4d9c-a414-0eb4827ab3ce::2
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyIiwiaWF0IjoxNzA4MTc4MDcxfQ.VKSQtPmZpr-s0XuGwfqWz7cPZg3QgHoDsuDmqtc26cQ
+
+###
+# 2. 있음 -> meetUpId 를 받을 수 있음
+POST localhost:8080/api/v1/meet/request
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyIiwiaWF0IjoxNzA4MTc4MDcxfQ.VKSQtPmZpr-s0XuGwfqWz7cPZg3QgHoDsuDmqtc26cQ
+
+###
+# QR 이 생기고 나면
+# UserA : meetUpId 를 가지고 누군가 들어왔는지 계속 체크 -> 들어왔으면 채팅방 입장
+# UserB : QR 을 찍어서 -> meetUpId 를 받아서 -> 채팅방 입장
+
+###
+# stream 으로 결과를 받는 flow

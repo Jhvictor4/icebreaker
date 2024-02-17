@@ -1,6 +1,6 @@
 package com.wafflestudio.ai.icebreaker.outbound.user
 
-import com.wafflestudio.ai.icebreaker.application.common.objectMapper
+import com.wafflestudio.ai.icebreaker.application.common.ObjectMapper
 import com.wafflestudio.ai.icebreaker.application.user.User
 import com.wafflestudio.ai.icebreaker.application.user.UserInformation
 import org.springframework.data.annotation.Id
@@ -32,7 +32,7 @@ data class UserEntity(
                     UserInformation.UserInformationType.IMAGE_URL -> UserInformation.ImageUrl::class.java
                 }
 
-                objectMapper.readValue(it.value, javaClass)
+                ObjectMapper.readValue(it.value, javaClass)
             }
         )
     }
@@ -46,7 +46,7 @@ data class UserEntity(
                     detail = user.information.map {
                         UserInformationEntity.UserInformationStringWithType(
                             type = it.type,
-                            value = objectMapper.writeValueAsString(it)
+                            value = ObjectMapper.writeValueAsString(it)
                         )
                     }
                 )
