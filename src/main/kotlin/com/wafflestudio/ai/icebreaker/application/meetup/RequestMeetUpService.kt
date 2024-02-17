@@ -13,16 +13,13 @@ class RequestMeetUpService(cacheManager: CacheManager) {
     private val meetUpRequestCache = cacheManager.getCache(LocalCache.MEET_UP_REQUEST_CACHE.alias)
         ?: throw ApplicationException.Common("Cache ${LocalCache.MEET_UP_REQUEST_CACHE.alias} not found")
 
-    private data class MeetUpRequestCacheData(
-        val meetUpId: MeetUpId,
-        val requestedUserId: Long // 필요없긴함
-    )
+    private data class MeetUpRequestCacheData(val meetUpId: String)
 
     fun requestMeetUp(
         userId: Long
     ): MeetUpId {
         val meetUpId = MeetUpId("${UUID.randomUUID()}::$userId")
-        if (meetUpRequestCache.putIfAbsent(userId, MeetUpRequestCacheData(meetUpId, userId)) != null) {
+        if (meetUpRequestCache.putIfAbsent(userId, MeetUpRequestCacheData(meetUpId.id)) != null) {
             throw ApplicationException.Common("MeetUp request already exists for user $userId")
         }
 
@@ -31,12 +28,11 @@ class RequestMeetUpService(cacheManager: CacheManager) {
 
     fun createMeetUpUrl(userId: Long, meetUpId: MeetUpId): String {
         // expire check
-        val meetUpQR = meetUpRequestCache.get(meetUpId, MeetUpRequestCacheData::class.java)
-            ?: throw ApplicationException.Common("MeetUp request not found for meetUpId $meetUpId")
+        val meetUpQR = meetUpRequestCache.get(userId, MeetUpRequestCacheData::class.java)
+            ?: throw ApplicationException.Common("MeetUp request not found for user $userId")
 
         // validation
-        check(meetUpQR.meetUpId.id == meetUpId.id) { "MeetUp request not found for meetUpId $meetUpId" }
-        check(meetUpQR.requestedUserId == userId) { "MeetUp request not found for meetUpId $meetUpId" }
+        check(meetUpQR.meetUpId == meetUpId.id) { "MeetUp request not found for meetUpId $meetUpId" }
 
         return "$BASE_URL/meet/$meetUpId"
     }
@@ -48,7 +44,7 @@ class RequestMeetUpService(cacheManager: CacheManager) {
             MeetUpRequestStatusDto(MeetUpRequestStatus.NONE, null)
         } else {
             // has waiting meet-up request. check if it's created
-            MeetUpRequestStatusDto(MeetUpRequestStatus.WAITING, cachedEntry.meetUpId?.id)
+            MeetUpRequestStatusDto(MeetUpRequestStatus.WAITING, cachedEntry.meetUpId)
         }
     }
 }
