@@ -131,12 +131,14 @@ class IceBreakingStreamService(
                 cursor += newHistories.maxOf { it.id }
             }
 
+            // delaying
+            delay(200)
             updatedMeetUp = meetUpRepository.findByMeetUpId(updatedMeetUp.meetUpId)
                 ?.toDomain()
                 ?: throw ApplicationException.Common("MeetUp not found")
         } while (updatedMeetUp.status != MeetUpStatus.DONE)
 
-        // try more after delaying 100ms
+        // try more
         delay(200)
         val newHistories = iceBreakingHistoryRepository
             .findAllByMeetUpIdAndIdGreaterThanOrderById(meetUpId, cursor)

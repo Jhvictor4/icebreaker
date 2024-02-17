@@ -1,6 +1,6 @@
 ### user 1. 2 동시에 스트림 처리 받아내는지 확인
 
-POST localhost:8080/api/v1/icebreaking/generate
+POST https://icebreaker.wafflestudio.com/api/v1/icebreaking/generate
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNzA4MTg0MDA5fQ.yoOq2xbA3CCT8BqNBA_f22i7mbESLvs4YnG3IHhJyaM
 Content-Type: application/stream+json
 
