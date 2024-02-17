@@ -42,7 +42,7 @@ class UserApiController(
         @RequestBody basicInformation: BasicInformation
     ): LoginResponse {
         logger.info { basicInformation }
-        val user = User.create()
+        val user = userRepository.create(User.create())
         val userId = userRepository.create(user).id
         user.name = basicInformation.name ?: throw IllegalArgumentException("require name parameter")
         val newUserInfo = mutableListOf<UserInformation>()

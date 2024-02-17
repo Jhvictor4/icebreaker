@@ -5,11 +5,36 @@ POST localhost:8080/api/v1/user/login
 # 로그인
 GET localhost:8080/api/v1/user/me
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyIiwiaWF0IjoxNzA4MTc4MDcxfQ.VKSQtPmZpr-s0XuGwfqWz7cPZg3QgHoDsuDmqtc26cQ
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI4IiwiaWF0IjoxNzA4MTgyMTk1fQ.CCsJM9TbFiyCeB2sZDdXC-g3gpjU57y1mu8xr_pNNTI
 
 ###
 # 정보 수정 (by 영인)
+POST localhost:8080/api/v1/user/basicInformation
+Content-Type: application/json
 
+{
+  "name": "지혁",
+  "birthDay": "2024-02-16 00:00",
+  "gender": "MALE",
+  "mbti": "ENTJ",
+  "major": "컴퓨터공학부"
+}
+
+###
+# 이미지 업로드
+POST localhost:8080/api/v1/upload
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNzA4MTczNzAyfQ.2YshDjkNM-ccVpTCdgTOBcGQjob51OJPLTphtN2ezYk
+
+--WebAppBoundary
+Content-Disposition: form-data; name="files"; filename="timetable.jpg"
+
+< ./timetable.jpg
+--WebAppBoundary--
+Content-Disposition: form-data; name="files"; filename="cat2.jpg"
+
+< ./cat.jpg
+--WebAppBoundary--
 
 ###
 # 내가 현재 QR을 만들었는가?
