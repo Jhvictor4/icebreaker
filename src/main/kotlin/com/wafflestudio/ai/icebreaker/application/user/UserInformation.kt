@@ -5,6 +5,12 @@ import java.time.LocalDateTime
 
 sealed interface UserInformation {
 
+    enum class UserInformationType {
+        BIRTHDAY, GENDER, MAJOR, MBTI, UNDERSTANDING
+    }
+
+    val type: UserInformationType
+
     // not used
     fun toPrompt(): String
     fun toDescription(): String
@@ -18,6 +24,8 @@ sealed interface UserInformation {
         override fun toDescription(): String {
             return "생년월일: ${date.year}년 ${date.monthValue}월 ${date.dayOfMonth}일에 태어났어요."
         }
+
+        override val type: UserInformationType = UserInformationType.BIRTHDAY
     }
     enum class Gender : UserInformation {
         MALE, FEMALE;
@@ -29,6 +37,8 @@ sealed interface UserInformation {
         override fun toDescription(): String {
             return "성별: 성별은 ${this.name}에요."
         }
+
+        override val type: UserInformationType = UserInformationType.GENDER
     }
 
     data class Major(val major: String) : UserInformation {
@@ -39,6 +49,9 @@ sealed interface UserInformation {
         override fun toDescription(): String {
             return "전공: 대학교에서는 $major 전공을 하고 있어요."
         }
+
+        override val type: UserInformationType
+            get() = UserInformationType.MAJOR
     }
 
     enum class MBTI : UserInformation {
@@ -52,6 +65,9 @@ sealed interface UserInformation {
         override fun toDescription(): String {
             return "MBTI: MBTI는 ${this.name}에요."
         }
+
+        override val type: UserInformationType
+            get() = UserInformationType.MBTI
     }
 
     data class UnderstandingInformation(
@@ -65,6 +81,9 @@ sealed interface UserInformation {
         override fun toDescription(): String {
             return "이해하는 데 도움이 될만한 글의 발췌: $value"
         }
+
+        override val type: UserInformationType
+            get() = UserInformationType.UNDERSTANDING
     }
 }
 
