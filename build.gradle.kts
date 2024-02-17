@@ -5,7 +5,6 @@ private val ktor_version = "2.3.8"
 plugins {
     id("org.springframework.boot") version "3.2.2"
     id("io.spring.dependency-management") version "1.1.4"
-    id("org.jlleitschuh.gradle.ktlint") version "11.2.0"
     id("application")
     kotlin("jvm") version "1.9.22"
     kotlin("plugin.spring") version "1.9.22"
@@ -62,12 +61,6 @@ dependencies {
     implementation("io.asyncer:r2dbc-mysql:1.1.0")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
-}
-
-ktlint {
-    disabledRules.set(
-        setOf("no-wildcard-imports", "enum-entry-name-case")
-    )
 }
 
 tasks.withType<KotlinCompile> {

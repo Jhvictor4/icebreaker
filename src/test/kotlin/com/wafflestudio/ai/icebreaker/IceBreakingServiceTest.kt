@@ -9,7 +9,6 @@ import com.wafflestudio.ai.icebreaker.application.user.UserInformation
 import com.wafflestudio.ai.icebreaker.application.user.UserPort
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.runBlocking
-import org.springframework.beans.factory.annotation.Autowired
 import java.time.LocalDateTime
 
 @OptIn(BetaOpenAI::class)
