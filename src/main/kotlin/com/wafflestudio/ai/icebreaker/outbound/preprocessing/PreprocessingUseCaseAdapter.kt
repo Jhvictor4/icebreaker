@@ -29,13 +29,17 @@ class PreprocessingUseCaseAdapter(
             - When looking at an image that appears to be a timetable, please provides a summary of the class names in korean
             - Do not interrupt until the end.
                 """.trimIndent(),
-                conversations = listOf(ChatMessage(Role.User, images.map {
-                    ImagePart("data:image/jpg;base64,${it}", "low")
-                })),
+                conversations = listOf(
+                    ChatMessage(
+                        Role.User,
+                        images.map {
+                            ImagePart("data:image/jpg;base64,$it", "low")
+                        }
+                    )
+                ),
                 specificModel = "gpt-4-vision-preview",
-                maxToken = 300,
+                maxToken = 300
             )
         }
     }
-
 }

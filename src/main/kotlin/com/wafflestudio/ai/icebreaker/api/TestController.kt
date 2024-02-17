@@ -3,28 +3,19 @@ package com.wafflestudio.ai.icebreaker.api
 import com.aallam.openai.api.BetaOpenAI
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
-import com.wafflestudio.ai.icebreaker.application.FinalQuestions
-import com.wafflestudio.ai.icebreaker.application.common.ChatGptResponseDto
 import com.wafflestudio.ai.icebreaker.application.icebreaking.IceBreakingService
 import com.wafflestudio.ai.icebreaker.application.icebreaking.IceBreakingServiceV2
 import com.wafflestudio.ai.icebreaker.application.icebreaking.textContent
 import com.wafflestudio.ai.icebreaker.application.understanding.Understanding
-import com.wafflestudio.ai.icebreaker.application.understanding.UnderstandingUseCase
 import com.wafflestudio.ai.icebreaker.application.user.User
 import com.wafflestudio.ai.icebreaker.application.user.UserInformation
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.reactor.asFlux
-import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import reactor.core.publisher.Flux
 import java.time.LocalDate
-import java.time.LocalDateTime
 
 @RestController
 @OptIn(BetaOpenAI::class)
@@ -34,7 +25,7 @@ class TestController(
     private val iceBreakingService: IceBreakingService,
     private val objectMapper: ObjectMapper
 ) {
-    @PostMapping("/test", produces= ["application/stream+json"])
+    @PostMapping("/test", produces = ["application/stream+json"])
     fun test(): Flux<Response> {
         val userA = User(
             1,
@@ -87,6 +78,6 @@ class TestController(
 
         data class FinalResult(
             val result: List<Question>
-        ): Response
+        ) : Response
     }
 }

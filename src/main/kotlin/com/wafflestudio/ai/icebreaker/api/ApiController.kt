@@ -28,7 +28,7 @@ class ApiController(
                 birthDay = LocalDateTime.now(),
                 gender = UserInformation.Gender.MALE,
                 mbti = UserInformation.MBTI.ENTJ,
-                major = "컴퓨터공학부",
+                major = "컴퓨터공학부"
             ),
             imageUrls = listOf("https://some.domain.name/path"),
             snsInformation = SnsInformation()
@@ -50,7 +50,7 @@ class ApiController(
 
     @PostMapping("/user/basicInformation")
     fun addBasicInformation(
-        @RequestBody basicInformation: BasicInformation,
+        @RequestBody basicInformation: BasicInformation
     ) {
         logger.info { "[addBasicInformation] basicInformation = $basicInformation" }
     }
@@ -74,13 +74,13 @@ class ApiController(
     )
 
     data class LoginResponse(
-        val sessionId: String,
+        val sessionId: String
     )
 
     data class UserResponse(
         val basicInformation: BasicInformation,
         val imageUrls: List<String> = emptyList(),
-        val snsInformation: SnsInformation,
+        val snsInformation: SnsInformation
     )
 
     data class BasicInformation(
@@ -89,14 +89,13 @@ class ApiController(
         val birthDay: LocalDateTime?,
         val gender: UserInformation.Gender?,
         val mbti: UserInformation.MBTI?,
-        val major: String?,
+        val major: String?
     )
 
     data class SnsInformation(
         val instagramUserIds: List<String> = emptyList(),
-        val blogUserIds: List<String> = emptyList(),
+        val blogUserIds: List<String> = emptyList()
     )
 
     companion object : Log
-
 }

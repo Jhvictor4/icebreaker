@@ -18,7 +18,7 @@ import java.time.LocalDateTime
 class IceBreakingServiceTest @Autowired constructor(
     private val iceBreakingService: IceBreakingService,
     private val iceBreakingServiceV2: IceBreakingServiceV2,
-    private val userPort: UserPort,
+    private val userPort: UserPort
 ) {
 
     @Test

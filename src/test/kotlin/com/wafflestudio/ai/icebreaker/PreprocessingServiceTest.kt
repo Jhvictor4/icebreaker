@@ -11,7 +11,7 @@ import java.util.*
 
 @SpringBootTest
 class PreprocessingServiceTest @Autowired constructor(
-    val preprocessingUseCase: PreprocessingUseCase,
+    val preprocessingUseCase: PreprocessingUseCase
 ) {
 
     @Test
@@ -26,5 +26,4 @@ class PreprocessingServiceTest @Autowired constructor(
 
         println(preprocessingUseCase.summarizeImages(strings))
     }
-
 }

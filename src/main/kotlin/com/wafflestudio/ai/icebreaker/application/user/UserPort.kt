@@ -1,7 +1,7 @@
 package com.wafflestudio.ai.icebreaker.application.user
 
 interface UserPort {
+    suspend fun create(user: User): User
 
-    fun getUser(id: Long): User?
-
+    suspend fun getUser(id: Long): User?
 }

@@ -7,5 +7,4 @@ interface PreprocessingUseCase {
     fun summarizeImages(
         images: List<String>
     ): ChatGptResponseDto?
-
 }

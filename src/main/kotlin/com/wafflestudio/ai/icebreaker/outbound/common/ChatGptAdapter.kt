@@ -68,7 +68,7 @@ class ChatGptAdapter(
         conversations: List<ChatMessage>,
         tools: List<Tool>,
         specificModel: String?,
-        maxToken: Int?,
+        maxToken: Int?
     ): ChatGptResponseDto? {
         val rawResponse = try {
             openAI.chatCompletion(
@@ -79,7 +79,7 @@ class ChatGptAdapter(
                         ?.let { ChatMessage(Role.System, it) }
                         ?.let(::listOf)
                         .orEmpty() +
-                            conversations,
+                        conversations,
                     tools = tools.takeIf { it.isNotEmpty() },
                     toolChoice = ToolChoice.Auto.takeIf { tools.isNotEmpty() },
                     maxTokens = maxToken

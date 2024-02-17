@@ -5,7 +5,7 @@ data class User(
     val name: String,
     val information: List<UserInformation>,
     val imageSummaryText: String = "",
-    var images: List<String> = emptyList(),
+    var images: List<String> = emptyList()
 ) {
     fun infoToPrompt(): String {
         return """
@@ -13,5 +13,15 @@ data class User(
             ${information.joinToString("\n") { it.toDescription() }}
             나에 관한 사진에 대한 요약: "$imageSummaryText"
         """.trimIndent()
+    }
+
+    companion object {
+        fun create(): User {
+            return User(
+                id = 0,
+                name = "",
+                information = emptyList()
+            )
+        }
     }
 }

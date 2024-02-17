@@ -41,18 +41,20 @@ class IceBreakingToolsCallableRegistry(
                 if (data.userA.images.isEmpty() || data.userB.images.isEmpty()) {
                     "이미지 정보 비교 실패"
                 } else {
-                    val query = listOf(TextPart("${data.userA.name}의 사진")) + data.userA.images.map { ImagePart("data:image/jpg;base64,${it}", "low") } +
-                            listOf(TextPart("${data.userB.name}의 사진")) + data.userB.images.map { ImagePart("data:image/jpg;base64,${it}", "low") }
-                    when (val resp = gptPort.createChat(
-                        prompt = """
+                    val query = listOf(TextPart("${data.userA.name}의 사진")) + data.userA.images.map { ImagePart("data:image/jpg;base64,$it", "low") } +
+                        listOf(TextPart("${data.userB.name}의 사진")) + data.userB.images.map { ImagePart("data:image/jpg;base64,$it", "low") }
+                    when (
+                        val resp = gptPort.createChat(
+                            prompt = """
                          이 이미지들은 ${data.userA.name}과 ${data.userB.name}과 관련된 이미지야.
                          이미지에는 각자의 취향과 특징이 담겨있어.
                          이미지를 기반으로 ${data.userA.name}과 ${data.userB.name}의 공통적 관심사에 대해 추출해줘.
-                        """.trimIndent(),
-                        conversations = listOf(ChatMessage(Role.User, query)),
-                        specificModel = "gpt-4-vision-preview",
-                        maxToken = 300,
-                    )) {
+                            """.trimIndent(),
+                            conversations = listOf(ChatMessage(Role.User, query)),
+                            specificModel = "gpt-4-vision-preview",
+                            maxToken = 300
+                        )
+                    ) {
                         is ChatGptResponseDto.Message -> {
                             resp.message
                         }
