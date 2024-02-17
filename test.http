@@ -1,15 +1,12 @@
-# 로그인
-POST localhost:8080/api/v1/user/login
-
 ###
 # 로그인
-GET localhost:8080/api/v1/user/me
+GET https://icebreaker.wafflestudio.com/api/v1/user/me
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI4IiwiaWF0IjoxNzA4MTgyMTk1fQ.CCsJM9TbFiyCeB2sZDdXC-g3gpjU57y1mu8xr_pNNTI
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyMCIsImlhdCI6MTcwODE4OTc3OX0.HnecONa4FQsCslAzgMZcROKnxJOVPzRyWdMn9mHPVu0
 
 ###
 # 정보 수정 (by 영인)
-POST localhost:8080/api/v1/user/basicInformation
+POST https://icebreaker.wafflestudio.com/api/v1/user/basicInformation
 Content-Type: application/json
 
 {
@@ -22,37 +19,37 @@ Content-Type: application/json
 
 ###
 # 이미지 업로드
-POST localhost:8080/api/v1/upload
+POST https://icebreaker.wafflestudio.com/api/v1/upload
 Content-Type: multipart/form-data; boundary=WebAppBoundary
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNzA4MTczNzAyfQ.2YshDjkNM-ccVpTCdgTOBcGQjob51OJPLTphtN2ezYk
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyMCIsImlhdCI6MTcwODE4OTc3OX0.HnecONa4FQsCslAzgMZcROKnxJOVPzRyWdMn9mHPVu0
 
 --WebAppBoundary
 Content-Disposition: form-data; name="files"; filename="timetable.jpg"
 
-< ./timetable.jpg
+< ./http/timetable.jpg
 --WebAppBoundary--
 Content-Disposition: form-data; name="files"; filename="cat2.jpg"
 
-< ./cat.jpg
+< ./http/cat.jpg
 --WebAppBoundary--
 
 ###
 # 내가 현재 QR을 만들었는가?
-GET localhost:8080/api/v1/meet/request/status
+GET https://icebreaker.wafflestudio.com/api/v1/meet/request/status
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyIiwiaWF0IjoxNzA4MTc4MDcxfQ.VKSQtPmZpr-s0XuGwfqWz7cPZg3QgHoDsuDmqtc26cQ
 
 ###
 # 1. 없음 -> QR 생성
-POST localhost:8080/api/v1/meet/request
+POST https://icebreaker.wafflestudio.com/api/v1/meet/request
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyIiwiaWF0IjoxNzA4MTc4MDcxfQ.VKSQtPmZpr-s0XuGwfqWz7cPZg3QgHoDsuDmqtc26cQ
 
 #### QR 만드는 API => 클라에 띄우고
-POST localhost:8080/api/v1/meet/make-qr?meetUpId=4a16333d-b218-4d9c-a414-0eb4827ab3ce::2
+POST https://icebreaker.wafflestudio.com/api/v1/meet/make-qr?meetUpId=4a16333d-b218-4d9c-a414-0eb4827ab3ce::2
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyIiwiaWF0IjoxNzA4MTc4MDcxfQ.VKSQtPmZpr-s0XuGwfqWz7cPZg3QgHoDsuDmqtc26cQ
 
 ###
 # 2. 있음 -> meetUpId 를 받을 수 있음
-POST localhost:8080/api/v1/meet/request
+POST https://icebreaker.wafflestudio.com/api/v1/meet/request
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIyIiwiaWF0IjoxNzA4MTc4MDcxfQ.VKSQtPmZpr-s0XuGwfqWz7cPZg3QgHoDsuDmqtc26cQ
 
 ###

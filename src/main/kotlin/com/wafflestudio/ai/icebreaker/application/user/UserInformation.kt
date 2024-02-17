@@ -7,7 +7,7 @@ import java.time.LocalDateTime
 sealed interface UserInformation {
 
     enum class UserInformationType {
-        BIRTHDAY, GENDER, MAJOR, MBTI, UNDERSTANDING, IMAGE_SUMMARY, IMAGE_URL,
+        BIRTHDAY, GENDER, MAJOR, MBTI, UNDERSTANDING, IMAGE_SUMMARY, IMAGE_URL, LOCATION,
     }
 
     val type: UserInformationType
@@ -86,6 +86,25 @@ sealed interface UserInformation {
         @JsonIgnore
         override val type: UserInformationType = UserInformationType.MBTI
     }
+
+    data class Location(val location: String) : UserInformation {
+        @get:JsonIgnore
+        override val type: UserInformationType
+            get() = UserInformationType.LOCATION
+
+        override val value: Any
+            get() = location
+
+        override fun toPrompt(): String {
+            return "{\"LOCATION\": \"$this\"}"
+        }
+
+        override fun toDescription(): String {
+            return "LOCATION: 사는 지역은 ${location}에요."
+        }
+
+    }
+
 
     data class ImageSummary(val text: String) : UserInformation {
 

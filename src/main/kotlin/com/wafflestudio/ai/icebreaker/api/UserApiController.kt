@@ -65,7 +65,7 @@ class UserApiController(
     ): LoginResponse {
         logger.info { basicInformation }
         val user = userRepository.create(User.create())
-        val userId = userRepository.create(user).id
+        val userId = user.id
         user.name = basicInformation.name ?: throw IllegalArgumentException("require name parameter")
         val newUserInfo = mutableListOf<UserInformation>()
         basicInformation.birthDay?.let {
@@ -79,6 +79,9 @@ class UserApiController(
         }
         basicInformation.major?.let {
             newUserInfo.add(UserInformation.Major(it))
+        }
+        basicInformation.location?.let {
+            newUserInfo.add(UserInformation.Location(it))
         }
 
         newUserInfo.addAll(user.information.filter { it is UserInformation.ImageSummary || it is UserInformation.ImageUrl })
@@ -97,7 +100,8 @@ class UserApiController(
         var birthDay: LocalDateTime? = null,
         var gender: UserInformation.Gender? = null,
         var mbti: UserInformation.MBTI? = null,
-        var major: String? = null
+        var major: String? = null,
+        var location: String? = null,
     )
 
     companion object : Log
