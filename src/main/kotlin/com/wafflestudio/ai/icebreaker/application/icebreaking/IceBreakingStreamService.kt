@@ -15,6 +15,7 @@ import com.wafflestudio.ai.icebreaker.outbound.icebreaking.IceBreakingHistoryRep
 import com.wafflestudio.ai.icebreaker.outbound.meetup.MeetUpEntity
 import com.wafflestudio.ai.icebreaker.outbound.meetup.MeetUpRepository
 import com.wafflestudio.ai.icebreaker.outbound.user.UserRepository
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import org.springframework.stereotype.Component
 
@@ -132,6 +133,16 @@ class IceBreakingStreamService(
                 ?.toDomain()
                 ?: throw ApplicationException.Common("MeetUp not found")
         } while (updatedMeetUp.status != MeetUpStatus.DONE)
+
+        // try more after delaying 100ms
+        delay(200)
+        val newHistories = iceBreakingHistoryRepository
+            .findAllByMeetUpIdAndIdGreaterThanOrderById(meetUpId, cursor)
+            .map { it.toDomain() }
+
+        if (newHistories.isNotEmpty()) {
+            emitAll(newHistories.asFlow().map { it.toResponse() })
+        }
     }
 
     companion object: Log
