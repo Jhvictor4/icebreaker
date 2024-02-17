@@ -46,7 +46,6 @@ class IceBreakingServiceV2(
             return@flow
         }
 
-//        val thread = openAI.thread(ThreadId("thread_s2wgzp8Fyry9wUNeGJ6iApsE"))!!
         val initialRun = chatGptPort.createRun(thread)
         val runId = initialRun.id
         logger.info { "RunId: $runId, ThreadId: ${thread.id}" }
