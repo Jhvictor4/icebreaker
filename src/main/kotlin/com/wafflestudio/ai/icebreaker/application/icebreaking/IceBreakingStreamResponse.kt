@@ -1,6 +1,6 @@
 package com.wafflestudio.ai.icebreaker.application.icebreaking
 
-interface IceBreakingStreamResponse {
+sealed interface IceBreakingStreamResponse {
     data class Thought(
         val thought: String
     ) : IceBreakingStreamResponse

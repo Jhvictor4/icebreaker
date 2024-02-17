@@ -1,6 +1,7 @@
-FROM openjdk:19-jdk-slim
+FROM openjdk:19-slim
 WORKDIR /app
 COPY . /app
-RUN ./gradlew :bootJar
 EXPOSE 8080
+ENV AWS_ACCESS_KEY_ID=AKIAV5APOORJLJ2LF3G6
+ENV AWS_SECRET_ACCESS_KEY=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
 ENTRYPOINT java $JAVA_OPTS -jar build/libs/icebreaker-0.0.1-SNAPSHOT.jar

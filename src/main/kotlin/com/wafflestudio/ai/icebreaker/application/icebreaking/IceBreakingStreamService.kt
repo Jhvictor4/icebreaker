@@ -8,11 +8,12 @@ import com.wafflestudio.ai.icebreaker.application.meetup.MeetUp
 import com.wafflestudio.ai.icebreaker.application.meetup.MeetUpId
 import com.wafflestudio.ai.icebreaker.application.meetup.MeetUpStatus
 import com.wafflestudio.ai.icebreaker.application.user.User
+import com.wafflestudio.ai.icebreaker.outbound.icebreaking.IceBreakingHistoryEntity
+import com.wafflestudio.ai.icebreaker.outbound.icebreaking.IceBreakingHistoryRepository
 import com.wafflestudio.ai.icebreaker.outbound.meetup.MeetUpEntity
 import com.wafflestudio.ai.icebreaker.outbound.meetup.MeetUpRepository
 import com.wafflestudio.ai.icebreaker.outbound.user.UserRepository
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.*
 import org.springframework.stereotype.Component
 
 typealias UserKey = String
@@ -23,6 +24,7 @@ class IceBreakingStreamService(
     private val userRepository: UserRepository,
     private val iceBreakingServiceV2: IceBreakingServiceV2,
     private val iceBreakingService: IceBreakingService,
+    private val iceBreakingHistoryRepository: IceBreakingHistoryRepository,
     private val objectMapper: ObjectMapper
 ) {
     private data class StrategyDecision(
@@ -71,13 +73,13 @@ class IceBreakingStreamService(
         }
 
         return when (decision.strategy) {
-            StreamStrategy.LISTEN_TO_OPENAI -> initGptAndStream(decision.userA, decision.userB)
-            StreamStrategy.POLL_HISTORY -> pollHistory(decision.meetUp, decision.userA, decision.userB)
+            StreamStrategy.LISTEN_TO_OPENAI -> initGptAndStream(decision.meetUp, decision.userA, decision.userB)
+            StreamStrategy.POLL_HISTORY -> pollHistory(decision.meetUp)
         }
     }
 
     @OptIn(BetaOpenAI::class)
-    private suspend fun initGptAndStream(userA: User, userB: User): Flow<IceBreakingStreamResponse> {
+    private suspend fun initGptAndStream(meetUp: MeetUp, userA: User, userB: User): Flow<IceBreakingStreamResponse> {
         return iceBreakingServiceV2.getIceBreakingQuestions(userA, userB)
             .map {
                 val stringResponse = it.textContent()
@@ -94,11 +96,35 @@ class IceBreakingStreamService(
                 } else {
                     val message = it.textContent()
                     IceBreakingStreamResponse.Thought(message)
+                }.also {
+                    iceBreakingHistoryRepository.save(IceBreakingHistoryEntity.from(IceBreakingHistory.from(meetUp.meetUpId, it)))
                 }
+            }
+            .onCompletion {
+                meetUpRepository.save(MeetUpEntity.from(meetUp.copy(status = MeetUpStatus.DONE)))
             }
     }
 
-    private fun pollHistory(meetUp: MeetUp, userA: User, userB: User): Flow<IceBreakingStreamResponse> {
-        TODO("DB 상태 보면서 폴링")
+    private fun pollHistory(meetUp: MeetUp): Flow<IceBreakingStreamResponse> = flow {
+        val meetUpId = meetUp.meetUpId
+        var updatedMeetUp = meetUpRepository.findByMeetUpId(meetUpId)
+            ?.toDomain()
+            ?: throw ApplicationException.Common("MeetUp not found")
+
+        var cursor = 0L
+        while (updatedMeetUp.status != MeetUpStatus.DONE) {
+            val newHistories = iceBreakingHistoryRepository
+                .findAllByMeetUpIdAndIdGreaterThanOrderById(meetUpId, 0)
+                .map { it.toDomain() }
+
+            if (newHistories.isNotEmpty()) {
+                emitAll(newHistories.asFlow().map { it.toResponse() })
+                cursor += newHistories.maxOf { it.id }
+            }
+
+            updatedMeetUp = meetUpRepository.findByMeetUpId(updatedMeetUp.meetUpId)
+                ?.toDomain()
+                ?: throw ApplicationException.Common("MeetUp not found")
+        }
     }
 }
