@@ -1,10 +1,9 @@
 package com.wafflestudio.ai.icebreaker.application.preprocessing
 
-import com.wafflestudio.ai.icebreaker.application.common.ChatGptResponseDto
-
 interface PreprocessingUseCase {
 
     fun summarizeImages(
+        id: Long,
         images: List<String>
-    ): ChatGptResponseDto?
+    )
 }

@@ -3,21 +3,32 @@ package com.wafflestudio.ai.icebreaker.outbound.preprocessing
 import com.aallam.openai.api.chat.ChatMessage
 import com.aallam.openai.api.chat.ImagePart
 import com.aallam.openai.api.core.Role
+import com.wafflestudio.ai.icebreaker.application.Log
 import com.wafflestudio.ai.icebreaker.application.common.ChatGptPort
 import com.wafflestudio.ai.icebreaker.application.common.ChatGptResponseDto
-import com.wafflestudio.ai.icebreaker.application.configuration.coroutineContext
 import com.wafflestudio.ai.icebreaker.application.preprocessing.PreprocessingUseCase
-import kotlinx.coroutines.runBlocking
+import com.wafflestudio.ai.icebreaker.application.storage.getFileExtensionValue
+import com.wafflestudio.ai.icebreaker.application.storage.root
+import com.wafflestudio.ai.icebreaker.application.user.UserInformation
+import com.wafflestudio.ai.icebreaker.outbound.user.UserRepository
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.springframework.stereotype.Component
+import java.nio.file.Files
+import java.nio.file.Path
+import java.util.*
 
 @Component
 class PreprocessingUseCaseAdapter(
-    private val client: ChatGptPort
+    private val client: ChatGptPort,
+    private val userRepository: UserRepository,
 ) : PreprocessingUseCase {
 
-    override fun summarizeImages(images: List<String>): ChatGptResponseDto? {
-        return runBlocking(coroutineContext) {
-            client.createChat(
+    override fun summarizeImages(id: Long, images: List<String>) {
+        CoroutineScope(Dispatchers.IO).launch {
+            val user = userRepository.getUser(id)!!
+            val response = client.createChat(
                 prompt = """
             This is an images related to a certain person.
             summarize the features and content of the images.
@@ -32,14 +43,33 @@ class PreprocessingUseCaseAdapter(
                 conversations = listOf(
                     ChatMessage(
                         Role.User,
-                        images.map {
-                            ImagePart("data:image/jpg;base64,$it", "low")
+                        images.map { filename ->
+                            val bytes = Files.readAllBytes(Path.of("${root}/$id/${filename}"))
+                            val file = Base64.getEncoder().encodeToString(bytes)
+                            val extensionValue = getFileExtensionValue(filename)
+                            ImagePart("data:${extensionValue};base64,${file}", "low")
                         }
                     )
                 ),
                 specificModel = "gpt-4-vision-preview",
                 maxToken = 300
             )
+            // response 저장.
+            val summaryText = when (response) {
+                is ChatGptResponseDto.Message -> response.message
+                else -> ""
+            }
+            val newUserInfo = user.information
+                .filter { it !is UserInformation.ImageSummary && it !is UserInformation.ImageUrl }
+                .toMutableList()
+
+            newUserInfo.add(UserInformation.ImageUrl(images))
+            newUserInfo.add(UserInformation.ImageSummary(summaryText))
+            user.information = newUserInfo
+            userRepository.create(user)
+            logger.info { "insert summaryText" }
         }
     }
+
+    companion object : Log
 }

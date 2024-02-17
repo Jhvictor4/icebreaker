@@ -24,6 +24,6 @@ class PreprocessingServiceTest @Autowired constructor(
             Base64.getEncoder().encodeToString(bytes)
         }
 
-        println(preprocessingUseCase.summarizeImages(strings))
+        println(preprocessingUseCase.summarizeImages(1, strings))
     }
 }
