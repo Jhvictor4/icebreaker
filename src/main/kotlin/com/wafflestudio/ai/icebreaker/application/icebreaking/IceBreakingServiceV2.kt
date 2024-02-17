@@ -26,7 +26,6 @@ import org.springframework.stereotype.Component
 class IceBreakingServiceV2(
     private val chatGptPort: ChatGptPort,
     private val iceBreakingToolsCallableRegistry: IceBreakingToolsCallableRegistry,
-    private val objectMapper: ObjectMapper,
     private val openAI: OpenAI
 ) {
     private val recentRunCache = mutableMapOf<String, Run>()

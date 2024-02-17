@@ -4,6 +4,7 @@ import com.aallam.openai.api.BetaOpenAI
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import com.wafflestudio.ai.icebreaker.api.ApplicationException
+import com.wafflestudio.ai.icebreaker.application.FinalQuestions
 import com.wafflestudio.ai.icebreaker.application.meetup.MeetUp
 import com.wafflestudio.ai.icebreaker.application.meetup.MeetUpId
 import com.wafflestudio.ai.icebreaker.application.meetup.MeetUpStatus
@@ -39,11 +40,6 @@ class IceBreakingStreamService(
         POLL_HISTORY
     }
 
-    /**
-     * Facade Pattern
-     *
-     * 1.
-     */
     suspend fun getIceBreakingStream(meetUpId: MeetUpId): Flow<IceBreakingStreamResponse> {
         // select - and - update
         val decision = Lock.withLock(meetUpId.id) {
@@ -84,12 +80,11 @@ class IceBreakingStreamService(
             .map {
                 val stringResponse = it.textContent()
                 if (iceBreakingService.isResultAnswer(stringResponse)) {
-                    val result = iceBreakingService.extract(stringResponse)
                     IceBreakingStreamResponse.FinalQuestion(
                         runCatching {
-                            objectMapper.readValue<IceBreakingStreamResponse.FinalQuestion>(result.single()).result
+                            objectMapper.readValue<List<IceBreakingStreamResponse.Question>>(extract(stringResponse))
                         }.getOrElse {
-                            IceBreakingService.logger.error { "Failed to parse result: $result" }
+                            IceBreakingService.logger.error { "Failed to parse result: $stringResponse" }
                             throw it
                         }
                     )
@@ -103,6 +98,14 @@ class IceBreakingStreamService(
             .onCompletion {
                 meetUpRepository.save(MeetUpEntity.from(meetUp.copy(status = MeetUpStatus.DONE)))
             }
+    }
+
+    private fun extract(input: String): String {
+        val regex = Regex("(?s)<RESPONSE>(.*?)</RESPONSE>")
+        val matches = regex.findAll(input)
+        return matches.map { it.groupValues[1].trim() }
+            .firstOrNull()
+            .orEmpty()
     }
 
     private fun pollHistory(meetUp: MeetUp): Flow<IceBreakingStreamResponse> = flow {

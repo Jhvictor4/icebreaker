@@ -6,7 +6,7 @@ import org.springframework.data.relational.core.mapping.Column
 import org.springframework.data.relational.core.mapping.Table
 import org.springframework.data.repository.kotlin.CoroutineCrudRepository
 
-@Table("icebreaking_history")
+@Table("ice_breaking_history")
 data class IceBreakingHistoryEntity(
     @Id
     val id: Long = 0,
