@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat
 import com.wafflestudio.ai.icebreaker.application.Log
 import com.wafflestudio.ai.icebreaker.application.user.User
 import com.wafflestudio.ai.icebreaker.application.user.UserInformation
+import com.wafflestudio.ai.icebreaker.outbound.user.UserEntity
 import com.wafflestudio.ai.icebreaker.outbound.user.UserRepository
 import org.springframework.web.bind.annotation.*
 import java.time.LocalDateTime
@@ -26,8 +27,8 @@ class UserApiController(
     @GetMapping("/me")
     suspend fun userMe(
         user: User // leverages parameterHandlerArgumentResolver
-    ): User {
-        return user
+    ): UserEntity {
+        return UserEntity.from(user)
     }
 
     @GetMapping("/{id}")
