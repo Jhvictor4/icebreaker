@@ -10,7 +10,13 @@ sealed interface IceBreakingStreamResponse {
         val keywords: List<String>
     )
 
+    data class Result(
+        val question: String,
+        val keywords: List<String>,
+        val cardNo: Int,
+    )
+
     data class FinalQuestion(
-        val result: List<Question>
+        val result: List<Result>
     ) : IceBreakingStreamResponse
 }
