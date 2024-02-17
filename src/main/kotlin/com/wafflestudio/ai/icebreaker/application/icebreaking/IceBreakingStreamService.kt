@@ -18,6 +18,7 @@ import com.wafflestudio.ai.icebreaker.outbound.user.UserRepository
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import org.springframework.stereotype.Component
+import kotlin.random.Random
 
 typealias UserKey = String
 
@@ -86,7 +87,8 @@ class IceBreakingStreamService(
                 if (iceBreakingService.isResultAnswer(stringResponse)) {
                     IceBreakingStreamResponse.FinalQuestion(
                         runCatching {
-                            objectMapper.readValue<List<IceBreakingStreamResponse.Question>>(extract(stringResponse))
+                            val cardNo = Random.nextInt(20) + 1
+                            objectMapper.readValue<List<IceBreakingStreamResponse.Question>>(extract(stringResponse)).map { IceBreakingStreamResponse.Result(it.question, it.keywords, cardNo) }
                         }.getOrElse {
                             IceBreakingService.logger.error { "Failed to parse result: $stringResponse" }
                             throw it
