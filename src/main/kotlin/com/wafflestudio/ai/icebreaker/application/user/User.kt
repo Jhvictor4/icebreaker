@@ -11,7 +11,6 @@ data class User(
         return """
             이름: "$name"
             ${information.joinToString("\n") { it.toDescription() }}
-            나에 관한 사진에 대한 요약: "$imageSummaryText"
         """.trimIndent()
     }
 
