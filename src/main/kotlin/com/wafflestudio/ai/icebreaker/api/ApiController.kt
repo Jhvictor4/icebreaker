@@ -21,29 +21,8 @@ class ApiController(
         return useCase.understandByUri(request.uri)
     }
 
-    @PostMapping("/user/basicInformation")
-    fun addBasicInformation(
-        @RequestBody basicInformation: BasicInformation
-    ) {
-        logger.info { "[addBasicInformation] basicInformation = $basicInformation" }
-    }
-
     data class UnderstandByUriRequest(
         val uri: String
-    )
-
-    data class BasicInformation(
-        val name: String?,
-        @JsonFormat(pattern = "yyyy-MM-dd HH:mm", timezone = "Asia/Seoul")
-        val birthDay: LocalDateTime?,
-        val gender: UserInformation.Gender?,
-        val mbti: UserInformation.MBTI?,
-        val major: String?
-    )
-
-    data class SnsInformation(
-        val instagramUserIds: List<String> = emptyList(),
-        val blogUserIds: List<String> = emptyList()
     )
 
     companion object : Log
