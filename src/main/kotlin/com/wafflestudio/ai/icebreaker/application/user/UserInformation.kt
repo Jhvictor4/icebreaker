@@ -1,12 +1,13 @@
 package com.wafflestudio.ai.icebreaker.application.user
 
 import com.wafflestudio.ai.icebreaker.application.understanding.Understanding
+import net.minidev.json.annotate.JsonIgnore
 import java.time.LocalDateTime
 
 sealed interface UserInformation {
 
     enum class UserInformationType {
-        BIRTHDAY, GENDER, MAJOR, MBTI, UNDERSTANDING
+        BIRTHDAY, GENDER, MAJOR, MBTI, UNDERSTANDING, IMAGE_SUMMARY, IMAGE_URL,
     }
 
     val type: UserInformationType
@@ -25,6 +26,7 @@ sealed interface UserInformation {
             return "생년월일: ${date.year}년 ${date.monthValue}월 ${date.dayOfMonth}일에 태어났어요."
         }
 
+        @JsonIgnore
         override val type: UserInformationType = UserInformationType.BIRTHDAY
     }
     enum class Gender : UserInformation {
@@ -38,6 +40,7 @@ sealed interface UserInformation {
             return "성별: 성별은 ${this.name}에요."
         }
 
+        @JsonIgnore
         override val type: UserInformationType = UserInformationType.GENDER
     }
 
@@ -50,8 +53,8 @@ sealed interface UserInformation {
             return "전공: 대학교에서는 $major 전공을 하고 있어요."
         }
 
-        override val type: UserInformationType
-            get() = UserInformationType.MAJOR
+        @JsonIgnore
+        override val type: UserInformationType = UserInformationType.MAJOR
     }
 
     enum class MBTI : UserInformation {
@@ -66,8 +69,34 @@ sealed interface UserInformation {
             return "MBTI: MBTI는 ${this.name}에요."
         }
 
-        override val type: UserInformationType
-            get() = UserInformationType.MBTI
+        @JsonIgnore
+        override val type: UserInformationType = UserInformationType.MBTI
+    }
+
+    data class ImageSummary(val text: String): UserInformation {
+        override fun toPrompt(): String {
+            return "{\"ImageSummaryText\": \"${text}\"}"
+        }
+
+        override fun toDescription(): String {
+            return "나에 관한 사진에 대한 요약: $text"
+        }
+
+        @JsonIgnore
+        override val type: UserInformationType = UserInformationType.IMAGE_SUMMARY
+    }
+
+    data class ImageUrl(val imageUrl: List<String>) : UserInformation {
+        override fun toPrompt(): String {
+            return ""
+        }
+
+        override fun toDescription(): String {
+            return ""
+        }
+
+        @JsonIgnore
+        override val type: UserInformationType = UserInformationType.IMAGE_URL
     }
 
     data class UnderstandingInformation(
@@ -82,8 +111,8 @@ sealed interface UserInformation {
             return "이해하는 데 도움이 될만한 글의 발췌: $value"
         }
 
-        override val type: UserInformationType
-            get() = UserInformationType.UNDERSTANDING
+        @JsonIgnore
+        override val type: UserInformationType = UserInformationType.UNDERSTANDING
     }
 }
 

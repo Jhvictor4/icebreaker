@@ -28,6 +28,8 @@ data class UserEntity(
                     UserInformation.UserInformationType.BIRTHDAY -> UserInformation.Birthday::class.java
                     UserInformation.UserInformationType.MAJOR -> UserInformation.Major::class.java
                     UserInformation.UserInformationType.UNDERSTANDING -> UserInformation.UnderstandingInformation::class.java
+                    UserInformation.UserInformationType.IMAGE_SUMMARY -> UserInformation.ImageSummary::class.java
+                    UserInformation.UserInformationType.IMAGE_URL -> UserInformation.ImageUrl::class.java
                 }
 
                 objectMapper.readValue(it.value, javaClass)

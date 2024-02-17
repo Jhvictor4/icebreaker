@@ -27,13 +27,6 @@ class ApiController(
         return useCase.understandByUri(request.uri)
     }
 
-    @PostMapping("/user/basicInformation")
-    fun addBasicInformation(
-        @RequestBody basicInformation: BasicInformation
-    ) {
-        logger.info { "[addBasicInformation] basicInformation = $basicInformation" }
-    }
-
     @GetMapping("/user/qr")
     fun getQRCode(): ResponseEntity<ByteArray> {
         val url = "https://naver.com"

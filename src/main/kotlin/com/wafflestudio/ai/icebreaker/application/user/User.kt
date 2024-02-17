@@ -2,8 +2,8 @@ package com.wafflestudio.ai.icebreaker.application.user
 
 data class User(
     val id: Long,
-    val name: String,
-    val information: List<UserInformation>,
+    var name: String,
+    var information: List<UserInformation>,
     val imageSummaryText: String = "",
     var images: List<String> = emptyList()
 ) {
