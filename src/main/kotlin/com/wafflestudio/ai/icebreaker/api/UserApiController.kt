@@ -33,7 +33,7 @@ class UserApiController(
 
     data class UserInformationResponse(
         val type: UserInformation.UserInformationType,
-        val value: String
+        val value: Any
     )
 
     @GetMapping("/me")
@@ -44,10 +44,7 @@ class UserApiController(
             id = user.id,
             name = user.name,
             information = user.information.map {
-                UserInformationResponse(
-                    type = it.type,
-                    value = objectMapper.writeValueAsString(it.value)
-                )
+                UserInformationResponse(type = it.type, value = it.value)
             }
         )
     }
